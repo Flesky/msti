@@ -8,13 +8,13 @@
     }"
   >
     <SwiperSlide>
-      as
+      Test 1
     </SwiperSlide>
     <SwiperSlide>
-      as
+      Test 2
     </SwiperSlide>
     <SwiperSlide>
-      as
+      Test 3
     </SwiperSlide>
   </Swiper>
 </template>

@@ -43,14 +43,12 @@ const items = ref([
 ])
 
 const visible = ref(false)
+
+const cart = useCookie('cart', { default: () => [] })
 </script>
 
 <template>
-  <div class="bg-primary-700">
-    <Drawer v-model:visible="visible" header="Drawer">
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-    </Drawer>
-
+  <div class="bg-primary-700 sticky top-0 z-[1000]">
     <Menubar
       :pt="{
         root: 'border-0 rounded-none bg-primary-700',
@@ -65,14 +63,45 @@ const visible = ref(false)
         <img class="w-32" src="/img/logo.png">
       </template>
       <template #buttonicon="{ toggleCallback }">
-        <Button class="text-white !size-10 shrink-0" @click="toggleCallback">
+        <Button class="text-white !size-12 shrink-0" @click="toggleCallback">
           <template #icon>
-            <Icon class="text-2xl" name="tabler:menu-2" />
+            <Icon class="text-3xl" name="tabler:menu-2" />
+          </template>
+        </Button>
+      </template>
+
+      <template #end>
+        <Button class="text-white !size-12 shrink-0" @click="visible = true">
+          <template #icon>
+            <Icon class="text-3xl" name="tabler:shopping-cart-filled" />
           </template>
         </Button>
       </template>
     </Menubar>
+
+    <Drawer v-model:visible="visible" position="right" header="Cart">
+      <ScrollPanel>
+        <div class="grid grid-cols-1 gap-2 p-4">
+          <Card v-for="product in cart" :key="product.id" class="border" :pt="{ header: 'brightness-50 rounded-2xl' }">
+            <template #header>
+              <img :src="product.data.images[0]">
+            </template>
+            <template #title>
+              {{ product.data.product_name }}
+            </template>
+            <template #footer>
+              <Button label="Remove" class="w-full" @click="cart.splice(cart.indexOf(product), 1)" />
+            </template>
+          </Card>
+        </div>
+      </ScrollPanel>
+
+      <template #footer>
+        <Button label="Checkout" class="w-full" />
+      </template>
+    </Drawer>
   </div>
   <NuxtPage />
   <ScrollTop />
+  <Toast position="top-left" group="tl" />
 </template>

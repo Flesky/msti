@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
 
   const { page } = data || { page: 1 }
 
-  const perPage = 10
+  const perPage = 20
   const start = (page - 1) * perPage
   const end = start + perPage
 
