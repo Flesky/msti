@@ -52,7 +52,7 @@ const preset = definePreset(Aura, {
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
-  modules: ['@nuxtjs/tailwindcss', '@primevue/nuxt-module', '@nuxt/icon', 'nuxt-swiper'],
+  modules: ['@nuxtjs/tailwindcss', '@primevue/nuxt-module', '@nuxt/icon', '@pinia/nuxt', 'pinia-plugin-persistedstate/nuxt', '@vueuse/nuxt', 'nuxt-swiper'],
 
   tailwindcss: {
     cssPath: '~/assets/css/tailwind.css',

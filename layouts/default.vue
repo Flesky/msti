@@ -1,4 +1,6 @@
-<script setup>
+<script setup lang="ts">
+import type { Product } from '@/server/api/products'
+import { useStorage } from '@vueuse/core'
 import { ref } from 'vue'
 
 const items = ref([
@@ -44,7 +46,7 @@ const items = ref([
 
 const visible = ref(false)
 
-const cart = useCookie('cart', { default: () => [] })
+const cart = useStorage<Product[]>('cart', [])
 </script>
 
 <template>
@@ -71,18 +73,20 @@ const cart = useCookie('cart', { default: () => [] })
       </template>
 
       <template #end>
-        <Button class="text-white !size-12 shrink-0" @click="visible = true">
-          <template #icon>
-            <Icon class="text-3xl" name="tabler:shopping-cart-filled" />
-          </template>
-        </Button>
+        <div class="flex gap-2">
+          <Button class="text-white !size-12 shrink-0" @click="visible = true">
+            <template #icon>
+              <Icon class="text-3xl" name="tabler:shopping-cart-filled" />
+            </template>
+          </Button>
+        </div>
       </template>
     </Menubar>
 
     <Drawer v-model:visible="visible" position="right" header="Cart">
       <ScrollPanel>
-        <div class="grid grid-cols-1 gap-2 p-4">
-          <Card v-for="product in cart" :key="product.id" class="border" :pt="{ header: 'brightness-50 rounded-2xl' }">
+        <div>
+          <Card v-for="{ product, quantity } in cart" :key="product.id" class="border" :pt="{ header: 'brightness-50 rounded-2xl' }">
             <template #header>
               <img :src="product.data.images[0]">
             </template>
@@ -102,6 +106,6 @@ const cart = useCookie('cart', { default: () => [] })
     </Drawer>
   </div>
   <NuxtPage />
-  <ScrollTop />
-  <Toast position="top-left" group="tl" />
+  <ScrollTop v-show="!visible" />
+  <Toast />
 </template>
