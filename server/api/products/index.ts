@@ -67,8 +67,9 @@ const filters: TreeNode[] = [
 ]
 
 const paginationSchema = z.object({
-  page: z.coerce.number().int().positive(),
-  filters: z.array(z.string()).optional(),
+  page: z.coerce.number().int().positive().optional(),
+  search: z.string().optional(),
+  filters: z.string().transform(val => val.length ? val.split(',') : undefined).optional()
 })
 
 export interface Product {
@@ -92,22 +93,27 @@ export interface Product {
 }
 
 export default defineEventHandler(async (event) => {
-  const { data } = await getValidatedQuery(event, body => paginationSchema.safeParse(body))
-  console.log(data)
-
-  const { page, filters } = data || { page: 1 }
+  const params = await getValidatedQuery(event, paginationSchema.parse)
+  const { page = 1, filters, search } = params
 
   const perPage = 20
   const start = (page - 1) * perPage
   const end = start + perPage
 
-  console.log(!!filters, filters, page, data)
-  const filteredData = filters ? equipmentData.filter(product => filters.includes(product.data.technical_specifications.category)) : equipmentData
+  let data = equipmentData
+
+  console.log(params)
+
+  if (filters)
+    data = data.filter(product => filters.includes(product.data.technical_specifications.category))
+  if (search)
+    data = data.filter(product => Object.values(product).join(' ').toLowerCase().includes(search.toLowerCase()))
+
 
   return {
-    products: filteredData.slice(start, end).map((product, id) => ({ ...product, id })),
+    products: data.slice(start, end).map((product, id) => ({ ...product, id })),
     meta: {
-      total: filteredData.length,
+      total: data.length,
       page,
       perPage,
     },

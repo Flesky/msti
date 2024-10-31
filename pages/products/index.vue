@@ -70,11 +70,17 @@ const nodes: TreeNode[] = [
 
 const route = useRoute()
 const routeQuery = computed(() => route.query)
-const { data, status } = await useFetch(() => `/api/products?page=${route.query.page || 1}`, {
-  watch: [computed(() => route.query)],
+
+const query = computed(() => ({
+  ...route.query,
+}))
+
+const { data, status } = await useFetch(() => `/api/products`, {
+  query,
 })
 
-const activeFilters = ref([])
+const activeFilters = ref()
+// const searchQuery = ref('')
 
 const cart = useStorage<{ product: Product, quantity: number }>('cart', [])
 
@@ -113,8 +119,10 @@ function addToCart(product) {
         </TreeSelect>
 
         <InputGroup class="w-max">
-          <InputText size="small" placeholder="Search..." />
-          <Button size="small" severity="secondary">
+          <InputText v-model="searchQuery" size="small" placeholder="Search..." />
+          <Button @click="navigateTo({
+            query: {...route.query, search: searchQuery}
+          })" size="small" severity="secondary">
             <template #icon>
               <Icon class="text-3xl" name="tabler:search" />
             </template>
