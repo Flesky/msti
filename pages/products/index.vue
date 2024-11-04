@@ -1,72 +1,6 @@
 <script setup lang="ts">
-import type { TreeNode } from 'primevue/treenode'
 import { useStorage } from '@vueuse/core'
 import type { Product } from '~/server/api/products'
-
-// Nodes can't have commas!
-const nodes: TreeNode[] = [
-  {
-    key: 'EKG/ECG',
-    label: 'EKG/ECG',
-    children: [
-      { key: 'One Piece Reusable EKG Cables', label: 'One Piece Reusable EKG Cables' },
-      { key: 'EKG Trunk Cables', label: 'EKG Trunk Cables' },
-      { key: 'EKG Lead Wires', label: 'EKG Lead Wires' },
-      { key: 'Disposable ECG Lead Wires', label: 'Disposable ECG Lead Wires' },
-      { key: 'Reusable ECG Lead Wires', label: 'Reusable ECG Lead Wires' },
-      { key: 'ECG Trunk Cables', label: 'ECG Trunk Cables' },
-      { key: 'One Piece Disposable ECG Cables', label: 'One Piece Disposable ECG Cables' },
-      { key: 'One Piece Reusable ECG Cables', label: 'One Piece Reusable ECG Cables' },
-      { key: 'Telemetry ECG Cables', label: 'Telemetry ECG Cables' },
-      { key: 'ECG Accessories', label: 'ECG Accessories' },
-    ],
-  },
-  {
-    key: 'SPO2',
-    label: 'SPO2',
-    children: [
-      { key: 'SpO2 Interface Cables', label: 'SpO2 Interface Cables' },
-      { key: 'Disposable SpO2 Sensors', label: 'Disposable SpO2 Sensors' },
-      { key: 'Reusable SpO2 Sensors', label: 'Reusable SpO2 Sensors' },
-    ],
-  },
-  {
-    key: 'NIBP',
-    label: 'NIBP',
-    children: [
-      { key: 'Disposable NIBP Cuffs', label: 'Disposable NIBP Cuffs' },
-      { key: 'Reusable NIBP Cuffs', label: 'Reusable NIBP Cuffs' },
-      { key: 'NIBP Air Hose', label: 'NIBP Air Hose' },
-      { key: 'NIBP Connectors', label: 'NIBP Connectors' },
-    ],
-  },
-  {
-    key: 'IBP',
-    label: 'IBP',
-    children: [
-      { key: 'Disposable IBP Transducers', label: 'Disposable IBP Transducers' },
-      { key: 'IBP Adapter Cables', label: 'IBP Adapter Cables' },
-    ],
-  },
-  {
-    key: 'Temp Probes',
-    label: 'Temp Probes',
-    children: [
-      { key: 'Temperature Adapter Cables', label: 'Temperature Adapter Cables' },
-      { key: 'Reusable Temperature Probes', label: 'Reusable Temperature Probes' },
-      { key: 'Disposable Temperature Probes', label: 'Disposable Temperature Probes' },
-      { key: 'Smart Temperature Probes', label: 'Smart Temperature Probes' },
-    ],
-  },
-  {
-    key: 'Oxygen Sensor',
-    label: 'Oxygen Sensor',
-  },
-  {
-    key: 'Fetal Transducer',
-    label: 'Fetal Transducer',
-  },
-]
 
 const route = useRoute()
 const routeQuery = computed(() => route.query)
@@ -79,8 +13,8 @@ const { data, status } = await useFetch(() => `/api/products`, {
   query,
 })
 
-const activeFilters = ref()
-// const searchQuery = ref('')
+const activeFilters = ref(data.value?.meta.activeFilters)
+const searchQuery = ref('')
 
 const cart = useStorage<{ product: Product, quantity: number }>('cart', [])
 
@@ -108,7 +42,7 @@ function addToCart(product) {
 
       <div class="flex gap-4">
         <TreeSelect
-          v-model="activeFilters" selection-mode="checkbox" :options="nodes" placeholder="Filter by category"
+          v-model="activeFilters" selection-mode="checkbox" :options="data?.filters" placeholder="Filter by category"
           @update:model-value="filters => navigateTo({
             query: { ...route.query, filters: Object.keys(filters).join(',') },
           })"
@@ -120,9 +54,11 @@ function addToCart(product) {
 
         <InputGroup class="w-max">
           <InputText v-model="searchQuery" size="small" placeholder="Search..." />
-          <Button @click="navigateTo({
-            query: {...route.query, search: searchQuery}
-          })" size="small" severity="secondary">
+          <Button
+            size="small" severity="secondary" @click="navigateTo({
+              query: { ...route.query, search: searchQuery },
+            })"
+          >
             <template #icon>
               <Icon class="text-3xl" name="tabler:search" />
             </template>

@@ -50,62 +50,66 @@ const cart = useStorage<Product[]>('cart', [])
 </script>
 
 <template>
-  <div class="bg-primary-700 sticky top-0 z-[1000]">
-    <Menubar
-      :pt="{
-        root: 'border-0 rounded-none bg-primary-700',
-        rootList: 'bg-primary-700 border-0',
+  <div>
+    <div class="bg-primary-700 sticky top-0 z-[1000]">
+      <ClientOnly>
+        <Menubar
+          :pt="{
+            root: 'border-0 rounded-none bg-primary-700',
+            rootList: 'bg-primary-700 border-0',
 
-        itemContent: 'rounded-none',
+            itemContent: 'rounded-none',
 
-        submenu: 'bg-primary-700 border-primary-800',
-      }" :model="items"
-    >
-      <template #start>
-        <img class="w-32" src="/img/logo.png">
-      </template>
-      <template #buttonicon="{ toggleCallback }">
-        <Button class="text-white !size-12 shrink-0" @click="toggleCallback">
-          <template #icon>
-            <Icon class="text-3xl" name="tabler:menu-2" />
+            submenu: 'bg-primary-700 border-primary-800',
+          }" :model="items"
+        >
+          <template #start>
+            <img class="w-32" src="/img/logo.png">
           </template>
-        </Button>
-      </template>
+          <template #buttonicon="{ toggleCallback }">
+            <Button class="text-white !size-12 shrink-0" @click="toggleCallback">
+              <template #icon>
+                <Icon class="text-3xl" name="tabler:menu-2" />
+              </template>
+            </Button>
+          </template>
 
-      <template #end>
-        <div class="flex gap-2">
-          <Button class="text-white !size-12 shrink-0" @click="visible = true">
-            <template #icon>
-              <Icon class="text-3xl" name="tabler:shopping-cart-filled" />
-            </template>
-          </Button>
-        </div>
-      </template>
-    </Menubar>
+          <template #end>
+            <div class="flex gap-2">
+              <Button class="text-white !size-12 shrink-0" @click="visible = true">
+                <template #icon>
+                  <Icon class="text-3xl" name="tabler:shopping-cart-filled" />
+                </template>
+              </Button>
+            </div>
+          </template>
+        </Menubar>
+      </ClientOnly>
 
-    <Drawer v-model:visible="visible" position="right" header="Cart">
-      <ScrollPanel>
-        <div>
-          <Card v-for="{ product, quantity } in cart" :key="product.id" class="border" :pt="{ header: 'brightness-50 rounded-2xl' }">
-            <template #header>
-              <img :src="product.data.images[0]">
-            </template>
-            <template #title>
-              {{ product.data.product_name }}
-            </template>
-            <template #footer>
-              <Button label="Remove" class="w-full" @click="cart.splice(cart.indexOf(product), 1)" />
-            </template>
-          </Card>
-        </div>
-      </ScrollPanel>
+      <Drawer v-model:visible="visible" position="right" header="Cart">
+        <ScrollPanel>
+          <div>
+            <Card v-for="{ product, quantity } in cart" :key="product.id" class="border" :pt="{ header: 'brightness-50 rounded-2xl' }">
+              <template #header>
+                <img :src="product.data.images[0]">
+              </template>
+              <template #title>
+                {{ product.data.product_name }}
+              </template>
+              <template #footer>
+                <Button label="Remove" class="w-full" @click="cart.splice(cart.indexOf(product), 1)" />
+              </template>
+            </Card>
+          </div>
+        </ScrollPanel>
 
-      <template #footer>
-        <Button label="Checkout" class="w-full" />
-      </template>
-    </Drawer>
+        <template #footer>
+          <Button label="Checkout" class="w-full" />
+        </template>
+      </Drawer>
+    </div>
+    <NuxtPage />
+    <ScrollTop v-show="!visible" />
+    <Toast />
   </div>
-  <NuxtPage />
-  <ScrollTop v-show="!visible" />
-  <Toast />
 </template>

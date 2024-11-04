@@ -2,7 +2,29 @@ import type { TreeNode } from 'primevue/treenode'
 import { z } from 'zod'
 import equipmentData from '~/mock/equipmentData.json'
 
-const filters: TreeNode[] = [
+export interface Product {
+  url: string
+  data: {
+    product_name: string
+    part_number: string
+    images: Array<string>
+    oem_reference: {
+      [key: string]: string | number
+    }
+    compatibility: {
+      manufacturer: string
+      [key: string]: string | number
+    }
+    technical_specifications: {
+      category: string
+      [key: string]: string | number
+    }
+  }
+}
+
+// Filter keys must be unique
+// Nodes can't have commas!
+const FILTER_OPTIONS: TreeNode[] = [
   {
     key: 'EKG/ECG',
     label: 'EKG/ECG',
@@ -66,31 +88,83 @@ const filters: TreeNode[] = [
   },
 ]
 
+// Flattened filters is to accelerate built in filtering
+// Available filters is to display the tree structure in the frontend
+// Simplify the flattening and ID assignment process
+function flattenAndAssignIds(tree: TreeNode[]): {
+  tree: TreeNode[]
+  keyToLabel: Map<string, string>
+} {
+  let i = 1
+  const keyToLabel = new Map<string, string>()
+
+  const assignId = (node: TreeNode): TreeNode => {
+    const key = String(i++)
+    const newNode = { ...node, key }
+    keyToLabel.set(key, node.label)
+
+    if (node.children && node.children.length) {
+      newNode.children = node.children.map(assignId)
+    }
+    return newNode
+  }
+
+  const newTree = tree.map(assignId)
+  return { tree: newTree, keyToLabel }
+}
+
+const { tree: availableFilters, keyToLabel } = flattenAndAssignIds(FILTER_OPTIONS)
+
+// Simplify showFilterStatus
+function showFilterStatus(appliedFilters: string[]) {
+  const appliedFilterSet = new Set(appliedFilters)
+  const status: Record<string, { checked: boolean, partiallyChecked: boolean }> = {}
+
+  const traverse = (node: TreeNode): { checked: boolean, partiallyChecked: boolean } => {
+    if (node.children?.length) {
+      const childStatuses = node.children.map(traverse)
+      const allChecked = childStatuses.every(s => s.checked)
+      const anyChecked = childStatuses.some(s => s.checked || s.partiallyChecked)
+      const nodeStatus = {
+        checked: allChecked,
+        partiallyChecked: anyChecked && !allChecked,
+      }
+      if (anyChecked)
+        status[node.key] = nodeStatus
+      return nodeStatus
+    }
+    else {
+      const isChecked = appliedFilterSet.has(node.key)
+      if (isChecked)
+        status[node.key] = { checked: true, partiallyChecked: false }
+      return { checked: isChecked, partiallyChecked: false }
+    }
+  }
+
+  availableFilters.forEach(traverse)
+  return status
+}
+
+// Simplify showFilteredProducts
+function showFilteredProducts(data: Product[], appliedFilters: string[]) {
+  const selectedLabels = new Set<string>()
+
+  appliedFilters.forEach((key) => {
+    const label = keyToLabel.get(key)
+    if (label)
+      selectedLabels.add(label)
+  })
+
+  return data.filter(product =>
+    selectedLabels.has(product.data.technical_specifications.category),
+  )
+}
+
 const paginationSchema = z.object({
   page: z.coerce.number().int().positive().optional(),
   search: z.string().optional(),
-  filters: z.string().transform(val => val.length ? val.split(',') : undefined).optional()
+  filters: z.string().transform(val => val.length ? val.split(',') : undefined).optional(), // Example: 22,23,24,27
 })
-
-export interface Product {
-  url: string
-  data: {
-    product_name: string
-    part_number: string
-    images: Array<string>
-    oem_reference: {
-      [key: string]: string | number
-    }
-    compatibility: {
-      manufacturer: string
-      [key: string]: string | number
-    }
-    technical_specifications: {
-      category: string
-      [key: string]: string | number
-    }
-  }
-}
 
 export default defineEventHandler(async (event) => {
   const params = await getValidatedQuery(event, paginationSchema.parse)
@@ -105,17 +179,18 @@ export default defineEventHandler(async (event) => {
   console.log(params)
 
   if (filters)
-    data = data.filter(product => filters.includes(product.data.technical_specifications.category))
+    data = showFilteredProducts(data, filters)
   if (search)
     data = data.filter(product => Object.values(product).join(' ').toLowerCase().includes(search.toLowerCase()))
 
-
   return {
     products: data.slice(start, end).map((product, id) => ({ ...product, id })),
+    filters: availableFilters,
     meta: {
       total: data.length,
       page,
       perPage,
+      activeFilters: showFilterStatus(filters || []),
     },
   } as { products: Array<Product>, meta: { total: number, page: number, perPage: number } }
 })
