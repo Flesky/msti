@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { Product } from '@/server/api/products'
-import { useStorage } from '@vueuse/core'
 import { ref } from 'vue'
 
 const items = ref([
@@ -46,7 +44,7 @@ const items = ref([
 
 const visible = ref(false)
 
-const cart = useStorage<Product[]>('cart', [])
+const cart = useCartStore()
 </script>
 
 <template>
@@ -86,22 +84,26 @@ const cart = useStorage<Product[]>('cart', [])
         </Menubar>
       </ClientOnly>
 
-      <Drawer v-model:visible="visible" position="right" header="Cart">
-        <ScrollPanel>
-          <div>
-            <Card v-for="{ product, quantity } in cart" :key="product.id" class="border" :pt="{ header: 'brightness-50 rounded-2xl' }">
-              <template #header>
-                <img :src="product.data.images[0]">
-              </template>
-              <template #title>
-                {{ product.data.product_name }}
-              </template>
-              <template #footer>
-                <Button label="Remove" class="w-full" @click="cart.splice(cart.indexOf(product), 1)" />
-              </template>
-            </Card>
-          </div>
-        </ScrollPanel>
+      <Drawer v-model:visible="visible" position="right" header="Cart" class="w-96">
+        <DataView :value="cart.cart">
+          <template #list="{ items }">
+            <div class="flex flex-col gap-2">
+              <div v-for="({ product, quantity }, index) in items" class="flex gap-4">
+                <img :src="product.data.images[0]" class="w-24 object-contain" :alt="`Image for ${product.data.product_name}`">
+                <div>
+                  <h2 class="text-lg font-medium">
+                    {{ product.data.product_name }}
+                  </h2>
+                  <p class="text-muted-color">
+                    {{ product.data.part_number }}
+                  </p>
+
+                  {{ quantity }}
+                </div>
+              </div>
+            </div>
+          </template>
+        </DataView>
 
         <template #footer>
           <Button label="Checkout" class="w-full" />

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useStorage } from '@vueuse/core'
 import type { Product } from '~/server/api/products'
 
 const route = useRoute()
@@ -16,18 +15,11 @@ const { data, status } = await useFetch(() => `/api/products`, {
 const activeFilters = ref(data.value?.meta.activeFilters)
 const searchQuery = ref('')
 
-const cart = useStorage<{ product: Product, quantity: number }>('cart', [])
-
+const cart = useCartStore()
 const toast = useToast()
 
-function addToCart(product) {
-  if (!cart.value.find(item => item.id === product.id)) {
-    cart.value.push({ product, quantity: 1 })
-  }
-  else {
-    const index = cart.value.findIndex(item => item.id === product.id)
-    cart.value[index].quantity++
-  }
+function addToCart(product: Product) {
+  cart.addToCart(product)
   toast
     .add({ severity: 'success', summary: `Added product ${product.data.product_name} to cart`, life: 3000 })
 }

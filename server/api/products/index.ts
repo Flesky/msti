@@ -4,6 +4,7 @@ import equipmentData from '~/mock/equipmentData.json'
 
 export interface Product {
   url: string
+  id: string
   data: {
     product_name: string
     part_number: string
@@ -88,11 +89,11 @@ const FILTER_OPTIONS: TreeNode[] = [
   },
 ]
 
-// Flattened filters is to accelerate built in filtering
-// Available filters is to display the tree structure in the frontend
-// Simplify the flattening and ID assignment process
+const PRODUCTS = equipmentData.map((product: Product) =>
+  ({ ...product, id: product.url.split('/').pop() })) as Product[]
+
 function flattenAndAssignIds(tree: TreeNode[]): {
-  tree: TreeNode[]
+  availableFilters: TreeNode[]
   keyToLabel: Map<string, string>
 } {
   let i = 1
@@ -101,7 +102,7 @@ function flattenAndAssignIds(tree: TreeNode[]): {
   const assignId = (node: TreeNode): TreeNode => {
     const key = String(i++)
     const newNode = { ...node, key }
-    keyToLabel.set(key, node.label)
+    keyToLabel.set(key, node.label || node.key)
 
     if (node.children && node.children.length) {
       newNode.children = node.children.map(assignId)
@@ -109,11 +110,10 @@ function flattenAndAssignIds(tree: TreeNode[]): {
     return newNode
   }
 
-  const newTree = tree.map(assignId)
-  return { tree: newTree, keyToLabel }
+  return { availableFilters: tree.map(assignId), keyToLabel }
 }
 
-const { tree: availableFilters, keyToLabel } = flattenAndAssignIds(FILTER_OPTIONS)
+const { availableFilters, keyToLabel } = flattenAndAssignIds(FILTER_OPTIONS)
 
 // Simplify showFilterStatus
 function showFilterStatus(appliedFilters: string[]) {
@@ -174,23 +174,24 @@ export default defineEventHandler(async (event) => {
   const start = (page - 1) * perPage
   const end = start + perPage
 
-  let data = equipmentData
-
-  console.log(params)
+  let products = PRODUCTS
 
   if (filters)
-    data = showFilteredProducts(data, filters)
+    products = showFilteredProducts(products, filters)
   if (search)
-    data = data.filter(product => Object.values(product).join(' ').toLowerCase().includes(search.toLowerCase()))
+    products = products.filter(product => Object.values(product).join(' ').toLowerCase().includes(search.toLowerCase()))
 
   return {
-    products: data.slice(start, end).map((product, id) => ({ ...product, id })),
+    products: products.slice(start, end),
     filters: availableFilters,
     meta: {
-      total: data.length,
+      total: products.length,
       page,
       perPage,
       activeFilters: showFilterStatus(filters || []),
     },
-  } as { products: Array<Product>, meta: { total: number, page: number, perPage: number } }
+  } as { products: Array<Product>, meta: { total: number, page: number, perPage: number, activeFilters: Record<string, {
+    checked: boolean
+    partiallyChecked: boolean
+  }> } }
 })
