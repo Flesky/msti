@@ -1,12 +1,21 @@
 import { z } from 'zod'
-import equipmentData from '~/mock/equipmentData.json'
+import type { Product } from '~/mock/products'
+import PRODUCTS from '~/mock/products'
 
 const idSchema = z.object({
-  id: z.coerce.number().int().positive(),
+  id: z.string(),
 })
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async (event): Promise<Product> => {
   const id = await getRouterParam(event, 'id')
 
-  return equipmentData[id]
+  const product = PRODUCTS.find(p => p.id === id)
+  if (!product) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: 'Product not found',
+    })
+  }
+
+  return product
 })

@@ -1,27 +1,7 @@
 import type { TreeNode } from 'primevue/treenode'
 import { z } from 'zod'
-import equipmentData from '~/mock/equipmentData.json'
-
-export interface Product {
-  url: string
-  id: string
-  data: {
-    product_name: string
-    part_number: string
-    images: Array<string>
-    oem_reference: {
-      [key: string]: string | number
-    }
-    compatibility: {
-      manufacturer: string
-      [key: string]: string | number
-    }
-    technical_specifications: {
-      category: string
-      [key: string]: string | number
-    }
-  }
-}
+import type { Product } from '~/mock/products'
+import PRODUCTS from '~/mock/products'
 
 // Filter keys must be unique
 // Nodes can't have commas!
@@ -89,20 +69,14 @@ const FILTER_OPTIONS: TreeNode[] = [
   },
 ]
 
-const PRODUCTS = equipmentData.map((product: Product) =>
-  ({ ...product, id: product.url.split('/').pop() })) as Product[]
-
-function flattenAndAssignIds(tree: TreeNode[]): {
-  availableFilters: TreeNode[]
-  keyToLabel: Map<string, string>
-} {
+function flattenAndAssignIds(tree: TreeNode[]): { availableFilters: TreeNode[], mappedFilters: Map<string, string> } {
   let i = 1
-  const keyToLabel = new Map<string, string>()
+  const mappedFilters = new Map<string, string>()
 
   const assignId = (node: TreeNode): TreeNode => {
     const key = String(i++)
     const newNode = { ...node, key }
-    keyToLabel.set(key, node.label || node.key)
+    mappedFilters.set(key, node.label || node.key)
 
     if (node.children && node.children.length) {
       newNode.children = node.children.map(assignId)
@@ -110,12 +84,11 @@ function flattenAndAssignIds(tree: TreeNode[]): {
     return newNode
   }
 
-  return { availableFilters: tree.map(assignId), keyToLabel }
+  return { availableFilters: tree.map(assignId), mappedFilters }
 }
 
-const { availableFilters, keyToLabel } = flattenAndAssignIds(FILTER_OPTIONS)
+const { availableFilters, mappedFilters } = flattenAndAssignIds(FILTER_OPTIONS)
 
-// Simplify showFilterStatus
 function showFilterStatus(appliedFilters: string[]) {
   const appliedFilterSet = new Set(appliedFilters)
   const status: Record<string, { checked: boolean, partiallyChecked: boolean }> = {}
@@ -145,12 +118,10 @@ function showFilterStatus(appliedFilters: string[]) {
   return status
 }
 
-// Simplify showFilteredProducts
 function showFilteredProducts(data: Product[], appliedFilters: string[]) {
   const selectedLabels = new Set<string>()
-
   appliedFilters.forEach((key) => {
-    const label = keyToLabel.get(key)
+    const label = mappedFilters.get(key)
     if (label)
       selectedLabels.add(label)
   })
@@ -166,9 +137,26 @@ const paginationSchema = z.object({
   filters: z.string().transform(val => val.length ? val.split(',') : undefined).optional(), // Example: 22,23,24,27
 })
 
-export default defineEventHandler(async (event) => {
-  const params = await getValidatedQuery(event, paginationSchema.parse)
-  const { page = 1, filters, search } = params
+interface Products {
+  products: Product[]
+  filters: TreeNode[]
+  meta: {
+    pagination: {
+      totalItems: number
+      page: number
+      perPage: number
+    }
+    filters: Record<string, {
+      checked: boolean
+      partiallyChecked: boolean
+    }>
+    search: string
+  }
+}
+
+export default defineEventHandler(async (event): Promise<Products> => {
+  const { data: params } = await getValidatedQuery(event, paginationSchema.safeParse)
+  const { page = 1, filters, search } = params || { }
 
   const perPage = 20
   const start = (page - 1) * perPage
@@ -185,13 +173,13 @@ export default defineEventHandler(async (event) => {
     products: products.slice(start, end),
     filters: availableFilters,
     meta: {
-      total: products.length,
-      page,
-      perPage,
-      activeFilters: showFilterStatus(filters || []),
+      pagination: {
+        totalItems: products.length,
+        page,
+        perPage,
+      },
+      filters: showFilterStatus(filters || []),
+      search: search || '',
     },
-  } as { products: Array<Product>, meta: { total: number, page: number, perPage: number, activeFilters: Record<string, {
-    checked: boolean
-    partiallyChecked: boolean
-  }> } }
+  }
 })

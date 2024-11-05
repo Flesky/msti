@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { Product } from '~/server/api/products'
-
 const route = useRoute()
 const routeQuery = computed(() => route.query)
 
@@ -12,27 +10,28 @@ const { data, status } = await useFetch(() => `/api/products`, {
   query,
 })
 
-const activeFilters = ref(data.value?.meta.activeFilters)
-const searchQuery = ref('')
+const activeFilters = ref(data.value?.meta.filters)
+const searchQuery = ref(data.value?.meta.search)
 
-const cart = useCartStore()
-const toast = useToast()
+const { addToCart } = useCartStore()
 
-function addToCart(product: Product) {
-  cart.addToCart(product)
-  toast
-    .add({ severity: 'success', summary: `Added product ${product.data.product_name} to cart`, life: 3000 })
-}
+const paginationDisplay = computed(() => {
+  const page = data.value?.meta.pagination.page
+  const perPage = data.value?.meta.pagination.perPage
+  const totalItems = data.value?.meta.pagination.totalItems
+
+  return `Showing ${((page - 1) * perPage) + 1} to ${Math.min(page * perPage, totalItems)} of ${totalItems} products`
+})
 </script>
 
 <template>
   <div class="p-4 mt-8 mx-auto max-w-screen-2xl">
-    <div class="flex flex-col sm:flex-row gap-2 justify-between">
+    <div class="flex flex-wrap gap-x-12 gap-y-4 justify-between">
       <h1 class="text-4xl font-medium">
         Products
       </h1>
 
-      <div class="flex gap-4">
+      <div class="flex flex-wrap gap-x-4 gap-y-2">
         <TreeSelect
           v-model="activeFilters" selection-mode="checkbox" :options="data?.filters" placeholder="Filter by category"
           @update:model-value="filters => navigateTo({
@@ -60,14 +59,12 @@ function addToCart(product: Product) {
     </div>
 
     <p class="mt-2 text-muted-color">
-      Showing {{ (data.meta.page - 1) * data.meta.perPage + 1 }} - {{
-        Math.min(data.meta.page * data.meta.perPage, data.meta.total)
-      }} of {{ data.meta.total }} products
+      {{ paginationDisplay }}
     </p>
 
     <Paginator
       class="my-4"
-      :rows="20" :first="(routeQuery.page ? Number(routeQuery.page) - 1 : 0) * 20" :total-records="data?.meta.total"
+      :rows="20" :first="(Number(data?.meta.pagination.page) - 1) * 20" :total-records="data?.meta.pagination.totalItems"
       @update:first="page => navigateTo({
         query: { ...route.query, page: page / 20 + 1 },
       })"
@@ -77,7 +74,7 @@ function addToCart(product: Product) {
       <NuxtLink v-for="product in data?.products" v-slot="{ navigate }" :key="product.url" :to="`products/${product.id}`" custom>
         <Card class="border" :pt="{ root: 'rounded-none', title: 'min-h-32 line-clamp-4' }" @click="navigate">
           <template #header>
-            <img alt="user header" :src="product.data.images[0]">
+            <img class="aspect-[3/2] object-cover" alt="user header" :src="product.data.images[0]">
           </template>
           <template #title>
             {{ product.data.product_name }}
@@ -91,7 +88,7 @@ function addToCart(product: Product) {
 
     <Paginator
       class="my-4"
-      :rows="20" :first="(routeQuery.page ? Number(routeQuery.page) - 1 : 0) * 20" :total-records="data?.meta.total"
+      :rows="20" :first="(Number(data?.meta.pagination.page) - 1) * 20" :total-records="data?.meta.pagination.totalItems"
       @update:first="page => navigateTo({
         query: { page: page / 20 + 1 },
       })"

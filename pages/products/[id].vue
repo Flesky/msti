@@ -1,39 +1,36 @@
 <script setup lang="ts">
-import type { Product } from '~/server/api/products'
-
 const route = useRoute()
-const { data } = await useFetch<Product>(`/api/products/${route.params.id}`)
+const { data: product } = await useFetch(`/api/products/${route.params.id}`)
 
 // Convert snake case to title case
 function toTitleCase(str: string) {
   return str.replace(/_/g, ' ').replace(/\w\S*/g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase())
 }
-const specs = Object.entries(data.value.data.technical_specifications).map(([name, value]) => ({ name: toTitleCase(name), value }))
+const specs = Object.entries(product.value?.data.technical_specifications).map(([name, value]) => ({ name: toTitleCase(name), value }))
 
 const quantity = ref(1)
+const { addToCart } = useCartStore()
 </script>
 
 <template>
-  <div class="p-4 mt-8">
-    <div class="lg:flex-row flex flex-col gap-6">
-      <div class="lg:max-w-lg w-full">
-        <ClientOnly>
-          <Galleria :value="data.data.images" :num-visible="5">
-            <template #item="{ item }">
-              <img :src="item">
-            </template>
-            <template #thumbnail="{ item }">
-              <img class="border border-gray-200" :src="item">
-            </template>
-          </Galleria>
-        </ClientOnly>
+  <ClientOnly>
+    <div class="lg:flex-row max-w-screen-2xl flex p-4 mt-8 mx-auto justify-center flex-col gap-8">
+      <div class="lg:max-w-2xl w-full">
+        <Galleria :value="product?.data.images" :num-visible="5">
+          <template #item="{ item }">
+            <img :src="item">
+          </template>
+          <template #thumbnail="{ item }">
+            <img class="border border-gray-200 max-h-16" :src="item">
+          </template>
+        </Galleria>
       </div>
       <div>
         <h1 class="text-4xl font-medium">
-          {{ data.data.product_name }}
+          {{ product?.data.product_name }}
         </h1>
         <p class="text-muted-color mt-2">
-          Part number: {{ data.data.part_number }}
+          Part number: {{ product?.data.part_number }}
         </p>
 
         <div class="mt-12">
@@ -47,7 +44,7 @@ const quantity = ref(1)
             </template>
           </InputNumber>
         </div>
-        <Button label="Add to cart" class="w-full mt-4" />
+        <Button label="Add to cart" class="w-full mt-4" @click="addToCart(product, quantity)" />
 
         <h2 class="text-2xl font-medium mt-14">
           Technical Specifications
@@ -58,5 +55,5 @@ const quantity = ref(1)
         </DataTable>
       </div>
     </div>
-  </div>
+  </ClientOnly>
 </template>
