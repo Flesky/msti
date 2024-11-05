@@ -126,9 +126,7 @@ function showFilteredProducts(data: Product[], appliedFilters: string[]) {
       selectedLabels.add(label)
   })
 
-  return data.filter(product =>
-    selectedLabels.has(product.data.technical_specifications.category),
-  )
+  return data.filter(product => selectedLabels.has(product.data.technical_specifications.category))
 }
 
 const paginationSchema = z.object({

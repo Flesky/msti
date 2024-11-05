@@ -25,7 +25,7 @@ const paginationDisplay = computed(() => {
 </script>
 
 <template>
-  <div class="p-4 mt-8 mx-auto max-w-screen-2xl">
+  <div class="p-4 mt-8 mx-auto max-w-screen-xl">
     <div class="flex flex-wrap gap-x-12 gap-y-4 justify-between">
       <h1 class="text-4xl font-medium">
         Products
@@ -70,7 +70,7 @@ const paginationDisplay = computed(() => {
       })"
     />
 
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 max-w-screen-2xl mx-auto gap-2">
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-2">
       <NuxtLink v-for="product in data?.products" v-slot="{ navigate }" :key="product.url" :to="`products/${product.id}`" custom>
         <Card class="border" :pt="{ root: 'rounded-none', title: 'min-h-32 line-clamp-4' }" @click="navigate">
           <template #header>

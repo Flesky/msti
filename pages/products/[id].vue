@@ -14,8 +14,8 @@ const { addToCart } = useCartStore()
 
 <template>
   <ClientOnly>
-    <div class="lg:flex-row max-w-screen-2xl flex p-4 mt-8 mx-auto justify-center flex-col gap-8">
-      <div class="lg:max-w-2xl w-full">
+    <div class="lg:flex-row max-w-screen-xl flex p-4 mt-8 mx-auto justify-center flex-col gap-8">
+      <div class="lg:max-w-xl w-full">
         <Galleria :value="product?.data.images" :num-visible="5">
           <template #item="{ item }">
             <img :src="item">

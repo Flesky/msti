@@ -7,9 +7,6 @@ const items = ref([
     url: '/',
   },
   {
-    label: 'Features',
-  },
-  {
     label: 'Products',
     url: '/products',
   },
@@ -18,13 +15,13 @@ const items = ref([
     items: [
       { label: 'Technical Solutions' },
       { label: 'CMMS' },
-      { label: 'RTLS' },
+      { label: 'RTLS', url: '/rtls' },
     ],
   },
   {
     label: 'Company',
     items: [
-      { label: 'About us' },
+      { label: 'About us', url: '/about' },
       { label: 'Careers' },
       { label: 'Contact' },
     ],

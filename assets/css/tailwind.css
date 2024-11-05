@@ -8,3 +8,7 @@
     @tailwind components;
     @tailwind utilities;
 }
+
+img.hero {
+    @apply h-[40vh] min-h-80 max-h-[640px];
+}

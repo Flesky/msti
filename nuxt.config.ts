@@ -1,21 +1,10 @@
 import { definePreset } from '@primevue/themes'
 import Aura from '@primevue/themes/aura'
+import tailwindConfig from './tailwind.config'
 
 const preset = definePreset(Aura, {
   semantic: {
-    primary: {
-      50: '#fef6ee',
-      100: '#fcead8',
-      200: '#f8d1b0',
-      300: '#f2b07f',
-      400: '#ec854b',
-      500: '#e86527',
-      600: '#d94c1d',
-      700: '#b4391a',
-      800: '#902f1c',
-      900: '#74291a',
-      950: '#3e130c',
-    },
+    primary: tailwindConfig.theme.extend.colors.primary,
     colorScheme: {
       light: {
         primary: {

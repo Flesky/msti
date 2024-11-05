@@ -30,17 +30,18 @@ const services = [
 <template>
   <div>
     <Swiper
-      :modules="[SwiperAutoplay]"
+      :modules="[SwiperAutoplay, SwiperPagination]"
       loop
       :autoplay="{
         delay: 8000,
         disableOnInteraction: true,
       }"
-      class="text-center"
+      pagination
+      class="text-center select-none"
     >
       <SwiperSlide>
         <div class="relative">
-          <img class="h-[640px] max-h-dvh w-full object-cover" src="/images/content/hero/1.jpg">
+          <img class="hero w-full object-cover" src="/images/content/hero/home-1.jpg">
           <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end text-white">
             <div class="max-w-screen-xl px-3 pb-24 mx-auto w-full">
               <div class="text-4xl font-bold">
@@ -56,7 +57,7 @@ const services = [
 
       <SwiperSlide>
         <div class="relative">
-          <img class="h-[640px] max-h-dvh w-full object-cover" src="/images/content/hero/2.jpg">
+          <img class="hero w-full object-cover" src="/images/content/hero/home-2.jpg">
           <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end text-white">
             <div class="max-w-screen-xl px-3 pb-24 mx-auto w-full">
               <div class="text-4xl font-bold">
@@ -71,26 +72,42 @@ const services = [
       </SwiperSlide>
     </Swiper>
 
-    <section class="px-4 text-center py-12">
-      <h1 class="text-4xl font-bold">
-        Our Services
-      </h1>
-      <p class="mt-4">
-        Explore the comprehensive range of support and technical solutions we offer to healthcare providers.
-      </p>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-6 max-w-screen-xl mx-auto gap-x-3 gap-y-4">
-        <Card v-for="(service, i) in services">
-          <template #header>
-            <img :src="`/images/content/services/${i + 1}.webp`" class="w-full object-cover" :alt="service.name">
-          </template>
-          <template #title>
-            {{ service.name }}
-          </template>
-          <template #content>
-            <p>{{ service.description }}</p>
-          </template>
-        </Card>
+    <section class="bg-gray-100">
+      <div class="px-4 max-w-screen-xl mx-auto py-12 text-center">
+        <h1 class="text-4xl font-bold">
+          Our Services
+        </h1>
+        <p class="mt-4">
+          Explore the comprehensive range of support and technical solutions we offer to healthcare providers.
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-6 gap-x-3 gap-y-4">
+          <Card v-for="(service, i) in services">
+            <template #header>
+              <img :src="`/images/content/services/${i + 1}.webp`" class="w-full object-cover" :alt="service.name">
+            </template>
+            <template #title>
+              {{ service.name }}
+            </template>
+            <template #content>
+              <p>{{ service.description }}</p>
+            </template>
+          </Card>
+        </div>
       </div>
     </section>
   </div>
 </template>
+
+<style>
+.swiper-pagination-progressbar {
+  top: calc(100% - 4px) !important;
+}
+
+.swiper-pagination-bullet {
+  @apply bg-white;
+}
+
+.swiper-pagination-bullet-active {
+  @apply bg-white;
+}
+</style>
