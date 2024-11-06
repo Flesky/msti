@@ -13,8 +13,8 @@ const items = ref([
   {
     label: 'Solutions',
     items: [
-      { label: 'Technical Solutions' },
-      { label: 'CMMS' },
+      { label: 'Technical Solutions', url: '/technical-solutions' },
+      { label: 'CMMS', url: '/cmms' },
       { label: 'RTLS', url: '/rtls' },
     ],
   },
@@ -22,7 +22,7 @@ const items = ref([
     label: 'Company',
     items: [
       { label: 'About us', url: '/about' },
-      { label: 'Careers' },
+      { label: 'Careers', url: '/careers' },
       { label: 'Contact', url: '/contact' },
     ],
   },
@@ -41,19 +41,19 @@ const { removeFromCart } = _cart
       <ClientOnly>
         <Menubar
           :pt="{
-            root: 'border-0 rounded-none bg-primary-700 max-w-screen-xl mx-auto',
-            rootList: 'bg-primary-700 border-0',
+            root: 'border-0 px-4 rounded-none bg-primary-700 max-w-screen-xl mx-auto',
+            rootList: 'bg-primary-700 rounded-none border-0',
 
             itemContent: 'rounded-none',
 
-            submenu: 'bg-primary-700 border-primary-800',
+            submenu: 'bg-primary-700 rounded-none border-primary-800 border-2',
           }" :model="items"
         >
           <template #start>
             <img class="w-32" src="/images/logo.png">
           </template>
           <template #buttonicon="{ toggleCallback }">
-            <Button class="!size-12 shrink-0 text-white" @click="toggleCallback">
+            <Button class="!size-10 shrink-0 text-white" @click="toggleCallback">
               <template #icon>
                 <Icon class="text-3xl" name="tabler:menu-2" />
               </template>
@@ -62,11 +62,14 @@ const { removeFromCart } = _cart
 
           <template #end>
             <div class="flex gap-2">
-              <Button class="!size-12 shrink-0 text-white" @click="visible = true">
+              <!-- TODO: Cart badge -->
+              <!-- <OverlayBadge severity="secondary" :value="cart.length ? cart.length : undefined" :pt="{}"> -->
+              <Button class="!size-10 shrink-0 text-white" @click="visible = true">
                 <template #icon>
                   <Icon class="text-3xl" name="tabler:shopping-cart-filled" />
                 </template>
               </Button>
+              <!-- </OverlayBadge> -->
             </div>
           </template>
         </Menubar>
@@ -121,3 +124,9 @@ const { removeFromCart } = _cart
     </footer>
   </div>
 </template>
+
+<style>
+.p-overlaybadge .p-badge {
+  @apply !outline-none
+}
+</style>

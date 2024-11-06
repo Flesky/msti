@@ -12,7 +12,6 @@ if (isCheckingOut === 'true') {
   message.value = checkout()
 }
 
-console.log(message.value)
 const SUBJECTS = ['General Inquiry', 'Sales Inquiry', 'Support Inquiry', 'Partnership Inquiry', 'Others'] as const
 const subjects = SUBJECTS.map(subject => ({ label: subject }))
 const PHONE_NUMBER_FORMATS = [
@@ -104,28 +103,45 @@ const resolver = zodResolver(schema)
 type Schema = z.infer<typeof schema>
 const formValues = ref<Schema>()
 
-const { execute, status } = useFetch('https://api.medsol.technology/api/submit', {
-  method: 'POST',
-  body: formValues,
+// const { execute, status } = useFetch('https://api.medsol.technology/api/submit', {
+//   method: 'POST',
+//   body: formValues,
+//   immediate: false,
+//   server: false,
+// })
+const toast = useToast()
+
+const { isLoading, execute } = useAsyncState(async () => {
+  const response = await fetch('https://api.medsol.technology/api/submit', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(formValues.value),
+  })
+  return response.json()
+}, {}, {
   immediate: false,
-  server: false,
+  onSuccess: () =>
+    toast.add({ severity: 'success', summary: `Your message has been sent.`, detail: 'Please expect a response from us soon.', life: 3000 }),
+  onError: () => toast.add({ severity: 'error', summary: 'An error occurred', detail: 'Please try again later.', life: 3000 })
+  ,
 })
 
-const toast = useToast()
 function handleSubmit({ values }: { values: Schema }) {
   const preprocessedValues = values
   preprocessedValues.phoneNumber = `${values.countryCode.code}${values.phoneNumber}`
+  preprocessedValues.countryCode = values.countryCode.code
+  preprocessedValues.subject = values.subject.label
   formValues.value = preprocessedValues
-  execute().then(() => {
-    toast.add({ severity: 'success', summary: `Your message has been sent.`, detail: 'Please expect a response from us soon.', life: 3000 })
-  })
+  execute()
 }
 </script>
 
 <template>
-  <div class="bg-secondary-100 p-4">
+  <div class="bg-secondary-100 px-4 py-16">
     <div class="mx-auto flex max-w-screen-xl flex-col md:flex-row">
-      <section class="w-full rounded-t-lg border bg-white p-6 md:rounded-l-lg">
+      <section class="w-full rounded-t-lg border bg-white p-6 md:rounded-none md:rounded-l-lg">
         <h1>
           Send us a message
         </h1>
@@ -175,14 +191,14 @@ function handleSubmit({ values }: { values: Schema }) {
               {{ $form.message.error.message }}
             </Message>
 
-            <Button :disabled="status === 'pending'" :loading="status === 'pending'" type="submit" class="mt-12">
+            <Button :loading="isLoading" type="submit" class="mt-12">
               Send message
             </Button>
           </Form>
         </ClientOnly>
       </section>
 
-      <section class="w-full rounded-b-lg bg-secondary-950 p-6 pb-20 text-white md:rounded-r-lg">
+      <section class="w-full rounded-b-lg bg-secondary-950 p-6 pb-20 text-white md:rounded-none md:rounded-r-lg">
         <h1>Contact Information</h1>
 
         <p class="mt-4">

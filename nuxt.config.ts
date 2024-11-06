@@ -68,6 +68,7 @@ export default defineNuxtConfig({
             name: 'primevue',
             order: 'tailwind-base, primevue, tailwind-utilities',
           },
+          darkModeSelector: 'none',
         },
       },
     },

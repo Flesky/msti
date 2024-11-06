@@ -41,7 +41,7 @@ const services = [
     >
       <SwiperSlide>
         <div class="relative">
-          <img class="hero w-full object-cover" src="/images/content/hero/home-1.jpg">
+          <img class="hero w-full object-cover" src="/images/hero/home-1.jpg">
           <div class="absolute inset-0 flex flex-col justify-end bg-black bg-opacity-50 text-white">
             <div class="mx-auto w-full max-w-screen-xl px-3 pb-24">
               <div class="text-4xl font-bold">
@@ -57,7 +57,7 @@ const services = [
 
       <SwiperSlide>
         <div class="relative">
-          <img class="hero w-full object-cover" src="/images/content/hero/home-2.jpg">
+          <img class="hero w-full object-cover" src="/images/hero/home-2.jpg">
           <div class="absolute inset-0 flex flex-col justify-end bg-black bg-opacity-50 text-white">
             <div class="mx-auto w-full max-w-screen-xl px-3 pb-24">
               <div class="text-4xl font-bold">
