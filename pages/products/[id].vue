@@ -14,14 +14,14 @@ const { addToCart } = useCartStore()
 
 <template>
   <ClientOnly>
-    <div class="lg:flex-row max-w-screen-xl flex p-4 mt-8 mx-auto justify-center flex-col gap-8">
-      <div class="lg:max-w-xl w-full">
+    <div class="mx-auto mt-8 flex max-w-screen-xl flex-col justify-center gap-8 p-4 lg:flex-row">
+      <div class="w-full lg:max-w-xl">
         <Galleria :value="product?.data.images" :num-visible="5">
           <template #item="{ item }">
             <img :src="item">
           </template>
           <template #thumbnail="{ item }">
-            <img class="border border-gray-200 max-h-16" :src="item">
+            <img class="max-h-16 border border-gray-200" :src="item">
           </template>
         </Galleria>
       </div>
@@ -29,13 +29,13 @@ const { addToCart } = useCartStore()
         <h1 class="text-4xl font-medium">
           {{ product?.data.product_name }}
         </h1>
-        <p class="text-muted-color mt-2">
+        <p class="mt-2 text-muted-color">
           Part number: {{ product?.data.part_number }}
         </p>
 
         <div class="mt-12">
           <label for="quantity" class="font-medium">Quantity</label>
-          <InputNumber v-model="quantity" input-id="quantity" class="w-40 ml-4 shrink-0" show-buttons button-layout="horizontal" :step="1" :min="1" fluid>
+          <InputNumber v-model="quantity" input-id="quantity" class="ml-4 w-40 shrink-0" show-buttons button-layout="horizontal" :step="1" :min="1" fluid>
             <template #decrementbuttonicon>
               <Icon name="tabler:minus" />
             </template>
@@ -44,9 +44,9 @@ const { addToCart } = useCartStore()
             </template>
           </InputNumber>
         </div>
-        <Button label="Add to cart" class="w-full mt-4" @click="addToCart(product, quantity)" />
+        <Button label="Add to cart" class="mt-4 w-full" @click="addToCart(product, quantity)" />
 
-        <h2 class="text-2xl font-medium mt-14">
+        <h2 class="mt-14 text-2xl font-medium">
           Technical Specifications
         </h2>
         <DataTable striped-rows :value="specs">

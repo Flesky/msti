@@ -12,3 +12,7 @@
 img.hero {
     @apply h-[40vh] min-h-80 max-h-[640px];
 }
+
+.p-message-error.p-message-simple {
+    color: var(--p-message-error-color);
+}

@@ -29,5 +29,12 @@ export const useCartStore = defineStore('cart', () => {
     }
   }
 
-  return { cart, addToCart, updateQuantity, removeFromCart }
+  function checkout() {
+    const items = cart.value.map(entry => `${entry.quantity}x ${entry.product.data.product_name} (PN: ${entry.product.data.part_number})`).join('\n')
+    cart.value = []
+    console.log(items)
+    return items
+  }
+
+  return { cart, addToCart, updateQuantity, removeFromCart, checkout }
 }, { persist: true })

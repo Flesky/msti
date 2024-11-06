@@ -15,6 +15,7 @@
     "@nuxt/icon": "^1.5.6",
     "@nuxtjs/tailwindcss": "^6.12.1",
     "@pinia/nuxt": "^0.5.5",
+    "@primevue/forms": "^4.2.1",
     "@primevue/themes": "^4.0.7",
     "@vueuse/core": "^11.1.0",
     "@vueuse/nuxt": "^11.1.0",
@@ -22,7 +23,7 @@
     "nuxt-swiper": "^1.2.2",
     "pinia": "^2.2.4",
     "pinia-plugin-persistedstate": "^4.1.1",
-    "primevue": "^4.0.7",
+    "primevue": "^4.2.1",
     "tailwindcss-primeui": "^0.3.4",
     "typescript": "^5.6.3",
     "vue": "latest",
@@ -33,7 +34,8 @@
     "@antfu/eslint-config": "^3.7.3",
     "@iconify-json/tabler": "^1.2.5",
     "@primevue/nuxt-module": "^4.0.7",
-    "eslint": "^9.11.1"
+    "eslint": "^9.14.0",
+    "eslint-plugin-tailwindcss": "^3.17.5"
   },
   "overrides": {
     "vue": "latest"

@@ -1,7 +1,5 @@
 <script setup lang="ts">
 const route = useRoute()
-const routeQuery = computed(() => route.query)
-
 const query = computed(() => ({
   ...route.query,
 }))
@@ -25,8 +23,8 @@ const paginationDisplay = computed(() => {
 </script>
 
 <template>
-  <div class="p-4 mt-8 mx-auto max-w-screen-xl">
-    <div class="flex flex-wrap gap-x-12 gap-y-4 justify-between">
+  <div class="mx-auto mt-8 max-w-screen-xl p-4">
+    <div class="flex flex-wrap justify-between gap-x-12 gap-y-4">
       <h1 class="text-4xl font-medium">
         Products
       </h1>
@@ -70,7 +68,7 @@ const paginationDisplay = computed(() => {
       })"
     />
 
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-2">
+    <div class="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
       <NuxtLink v-for="product in data?.products" v-slot="{ navigate }" :key="product.url" :to="`products/${product.id}`" custom>
         <Card class="border" :pt="{ root: 'rounded-none', title: 'min-h-32 line-clamp-4' }" @click="navigate">
           <template #header>

@@ -13,6 +13,12 @@ const preset = definePreset(Aura, {
           hoverColor: '{primary.800}',
           activeColor: '{primary.900}',
         },
+        secondary: {
+          color: '{secondary.800}',
+          contrastColor: '#ffffff',
+          hoverColor: '{secondary.900}',
+          activeColor: '{secondary.950}',
+        },
         navigation: {
           item: {
             focusBackground: '{primary.800}',

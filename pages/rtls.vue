@@ -70,27 +70,27 @@ const solutions = [
 <template>
   <div>
     <div class="relative">
-      <img class="hero w-full object-cover bg-blue-800">
-      <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center text-center text-white">
-        <div class="max-w-screen-xl p-3 mx-auto w-full">
+      <img class="hero w-full bg-blue-800 object-cover">
+      <div class="absolute inset-0 flex flex-col justify-center bg-black bg-opacity-50 text-center text-white">
+        <div class="mx-auto w-full max-w-screen-xl p-3">
           <div class="text-4xl font-bold">
             Real-time Location System
           </div>
           <p>
             Our RTLS delivers an enterprise real-time location system that interconnects and reveals insights across all areas and departments in your organization. The benefits of this approach include:
-            <ul class="list-disc">
-              <li>Architectural control from tag firmware to cloud computing</li>
-              <li>Location insights to existing business applications</li>
-              <li>
-                Increased value of existing technology investments
-              </li>
-            </ul>
           </p>
+          <ul class="list-disc">
+            <li>Architectural control from tag firmware to cloud computing</li>
+            <li>Location insights to existing business applications</li>
+            <li>
+              Increased value of existing technology investments
+            </li>
+          </ul>
         </div>
       </div>
     </div>
 
-    <section class="px-4 text-center py-12 bg-gray-100">
+    <section class="bg-gray-100 px-4 py-12 text-center">
       <h1 class="text-4xl font-bold">
         Sofia Interface
       </h1>
@@ -100,11 +100,11 @@ const solutions = [
       <p class="mt-4">
         Modules are complete with dashboards, mapping tools, reports, etc. Simple to deploy, simple to use, each module helps you derive value quickly.
       </p>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-6 max-w-screen-xl mx-auto gap-x-3 gap-y-4">
+      <div class="mx-auto mt-6 grid max-w-screen-xl grid-cols-1 gap-x-3 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
         <Card v-for="(solution, i) in solutions">
           <template #header>
             <!--            <img :src="`/images/content/services/${i + 1}.webp`" class="w-full object-cover" :alt="solution.name"> -->
-            <Icon class="text-6xl mt-4 text-secondary-900" :name="solution.icon" />
+            <Icon class="mt-4 text-6xl text-secondary-900" :name="solution.icon" />
           </template>
           <template #title>
             {{ solution.name }}

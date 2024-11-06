@@ -23,7 +23,7 @@ const items = ref([
     items: [
       { label: 'About us', url: '/about' },
       { label: 'Careers' },
-      { label: 'Contact' },
+      { label: 'Contact', url: '/contact' },
     ],
   },
 ])
@@ -37,7 +37,7 @@ const { removeFromCart } = _cart
 
 <template>
   <div>
-    <div class="bg-primary-700 sticky top-0 z-[1000]">
+    <div class="sticky top-0 z-[1000] bg-primary-700">
       <ClientOnly>
         <Menubar
           :pt="{
@@ -53,7 +53,7 @@ const { removeFromCart } = _cart
             <img class="w-32" src="/images/logo.png">
           </template>
           <template #buttonicon="{ toggleCallback }">
-            <Button class="text-white !size-12 shrink-0" @click="toggleCallback">
+            <Button class="!size-12 shrink-0 text-white" @click="toggleCallback">
               <template #icon>
                 <Icon class="text-3xl" name="tabler:menu-2" />
               </template>
@@ -62,7 +62,7 @@ const { removeFromCart } = _cart
 
           <template #end>
             <div class="flex gap-2">
-              <Button class="text-white !size-12 shrink-0" @click="visible = true">
+              <Button class="!size-12 shrink-0 text-white" @click="visible = true">
                 <template #icon>
                   <Icon class="text-3xl" name="tabler:shopping-cart-filled" />
                 </template>
@@ -76,8 +76,8 @@ const { removeFromCart } = _cart
         <DataView :value="cart">
           <template #list="{ items }">
             <div class="flex flex-col">
-              <div v-for="({ product, quantity }, index) in items" class="flex py-4 gap-4 items-start" :class="{ 'border-t border-surface-200 dark:border-surface-700': index > 0 }">
-                <img :src="product.data.images[0]" class="w-24 pt-2 object-contain" :alt="`Image for ${product.data.product_name}`">
+              <div v-for="({ product, quantity }, index) in items" class="flex items-start gap-4 py-4" :class="{ 'border-t border-surface-200 dark:border-surface-700': index > 0 }">
+                <img :src="product.data.images[0]" class="w-24 object-contain pt-2" :alt="`Image for ${product.data.product_name}`">
                 <div>
                   <h2 class="text-lg font-medium">
                     {{ product.data.product_name }}
@@ -98,15 +98,25 @@ const { removeFromCart } = _cart
         </DataView>
 
         <template #footer>
-          <Button label="Checkout" class="w-full" />
+          <div class="p-4">
+            <Button
+              label="Checkout" class="w-full" @click="navigateTo({
+                path: '/contact',
+                query: {
+                  checkout: true,
+                },
+              })"
+            />
+          </div>
         </template>
       </Drawer>
     </div>
     <NuxtPage />
     <ScrollTop v-show="!visible" />
     <Toast position="top-left" />
+    <DynamicDialog />
 
-    <footer class="bg-gray-800 text-white text-center p-4">
+    <footer class="bg-gray-800 p-4 text-center text-white">
       <p>© 2024 Medical Solution Technology Inc.</p>
     </footer>
   </div>
