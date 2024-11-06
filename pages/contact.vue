@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import { zodResolver } from '@primeuix/forms/resolvers/zod'
 import { Form } from '@primevue/forms'
-import { zodResolver } from '@primevue/forms/resolvers/zod'
 import { z } from 'zod'
 
 const route = useRoute()
