@@ -70,12 +70,18 @@ const paginationDisplay = computed(() => {
 
     <div class="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
       <NuxtLink v-for="product in data?.products" v-slot="{ navigate }" :key="product.url" :to="`products/${product.id}`" custom>
-        <Card class="border" :pt="{ root: 'rounded-none', title: 'min-h-32 line-clamp-4' }" @click="navigate">
+        <Card class="border" :pt="{ root: 'rounded-none', title: 'min-h-40' }" @click="navigate">
           <template #header>
             <img class="aspect-[3/2] object-cover" alt="user header" :src="product.data.images[0]">
           </template>
           <template #title>
-            {{ product.data.product_name }}
+            <h2 class="line-clamp-3">
+              {{ product.data.product_name }}
+            </h2>
+            <div class="mt-2 text-base font-normal text-muted-color">
+              <div>{{ product.data.part_number }}</div>
+              <div>{{ product.data.technical_specifications.category }}</div>
+            </div>
           </template>
           <template #footer>
             <Button label="Add to cart" class="w-full" @click.prevent="addToCart(product)" />
