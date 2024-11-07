@@ -37,7 +37,7 @@ const items = [
   <div>
     <div class="bg-gray-100">
       <div class="mx-auto max-w-screen-xl px-4 py-12 text-center">
-        <div class="font-medium">
+        <div class="font-medium text-secondary-800">
           CMMS
         </div>
         <h1 class="mt-2 text-4xl font-bold">
@@ -60,9 +60,9 @@ const items = [
 
     <section>
       <div v-for="(item, i) in items" class="mx-auto flex max-w-screen-xl flex-col items-center px-4 py-12">
-        <div class="flex gap-4" :class="i % 2 ? 'md:flex-row-reverse' : undefined">
+        <div class="flex flex-col gap-4" :class="i % 2 ? 'md:flex-row-reverse' : undefined">
           <div class="max-w-xl">
-            <p class="font-bold uppercase text-blue-800">
+            <p class="font-bold uppercase text-secondary-800">
               {{ item.header }}
             </p>
             <h2 class="mt-2 text-2xl font-bold">
