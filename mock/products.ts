@@ -11,9 +11,10 @@ export interface Product {
       [key: string]: string | number
     }
     compatibility: {
-      manufacturer: string
+      manufacturer: 'Model'
       [key: string]: string | number
-    }
+      // eslint-disable-next-line ts/no-empty-object-type
+    } | {}
     technical_specifications: {
       category: string
       [key: string]: string | number

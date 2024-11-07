@@ -6,8 +6,9 @@ const { data: product } = await useFetch(`/api/products/${route.params.id}`)
 function toTitleCase(str: string) {
   return str.replace(/_/g, ' ').replace(/\w\S*/g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase())
 }
-const specs = Object.entries(product.value?.data.technical_specifications).map(([name, value]) => ({ name: toTitleCase(name), value }))
 
+const compatibilitySpecs = 'manufacturer' in product.value?.data.compatibility ? Object.entries(product.value?.data.compatibility).map(([name, value]) => ({ name: toTitleCase(name), value })).slice(1) : undefined
+const technicalSpecs = Object.entries(product.value.data.technical_specifications).map(([name, value]) => ({ name: toTitleCase(name), value }))
 const quantity = ref(1)
 const { addToCart } = useCartStore()
 </script>
@@ -32,6 +33,7 @@ const { addToCart } = useCartStore()
         <p class="mt-2 text-muted-color">
           Part number: {{ product?.data.part_number }}
         </p>
+        <!--        TODO: Add category hyperlink -->
 
         <div class="mt-12">
           <label for="quantity" class="font-medium">Quantity</label>
@@ -46,10 +48,20 @@ const { addToCart } = useCartStore()
         </div>
         <Button label="Add to cart" class="mt-4 w-full" @click="addToCart(product, quantity)" />
 
+        <template v-if="compatibilitySpecs">
+          <h2 class="mt-14 text-2xl font-medium">
+            Compatibility Information
+          </h2>
+          <DataTable class="mt-2" :value="compatibilitySpecs">
+            <Column header="Manufacturer" field="name" />
+            <Column header="Model" field="value" />
+          </DataTable>
+        </template>
+
         <h2 class="mt-14 text-2xl font-medium">
           Technical Specifications
         </h2>
-        <DataTable striped-rows :value="specs">
+        <DataTable class="mt-2" :value="technicalSpecs">
           <Column field="name" />
           <Column field="value" />
         </DataTable>

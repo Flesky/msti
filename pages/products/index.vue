@@ -24,12 +24,12 @@ const paginationDisplay = computed(() => {
 
 <template>
   <div class="mx-auto mt-8 max-w-screen-xl p-4">
-    <div class="flex flex-wrap justify-between gap-x-12 gap-y-4">
+    <div class="flex flex-col justify-between gap-x-12 gap-y-4 md:flex-row">
       <h1 class="text-4xl font-medium">
         Products
       </h1>
 
-      <div class="flex flex-wrap gap-x-4 gap-y-2">
+      <div class="flex flex-col gap-2 md:flex-row">
         <TreeSelect
           v-model="activeFilters" selection-mode="checkbox" :options="data?.filters" placeholder="Filter by category"
           @update:model-value="filters => navigateTo({
@@ -41,7 +41,7 @@ const paginationDisplay = computed(() => {
           </template>
         </TreeSelect>
 
-        <InputGroup class="w-max">
+        <InputGroup class="w-full md:w-56">
           <InputText v-model="searchQuery" size="small" placeholder="Search..." />
           <Button
             size="small" severity="secondary" @click="navigateTo({
@@ -56,19 +56,20 @@ const paginationDisplay = computed(() => {
       </div>
     </div>
 
-    <p class="mt-2 text-muted-color">
-      {{ paginationDisplay }}
-    </p>
+    <div class="mt-6 flex w-full flex-col items-center justify-between gap-x-4 md:flex-row">
+      <p class="text-center text-muted-color">
+        {{ paginationDisplay }}
+      </p>
+      <Paginator
+        class="mt-2"
+        :rows="20" :first="(Number(data?.meta.pagination.page) - 1) * 20" :total-records="data?.meta.pagination.totalItems"
+        @update:first="page => navigateTo({
+          query: { page: page / 20 + 1 },
+        })"
+      />
+    </div>
 
-    <Paginator
-      class="my-4"
-      :rows="20" :first="(Number(data?.meta.pagination.page) - 1) * 20" :total-records="data?.meta.pagination.totalItems"
-      @update:first="page => navigateTo({
-        query: { ...route.query, page: page / 20 + 1 },
-      })"
-    />
-
-    <div class="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
+    <div class="mt-4 grid grid-cols-2 gap-2 md:grid-cols-4 xl:grid-cols-5">
       <NuxtLink v-for="product in data?.products" v-slot="{ navigate }" :key="product.url" :to="`/products/${product.id}`" custom>
         <Card class="border" :pt="{ root: 'rounded-none', title: 'min-h-40' }" @click="navigate">
           <template #header>
@@ -90,12 +91,17 @@ const paginationDisplay = computed(() => {
       </NuxtLink>
     </div>
 
-    <Paginator
-      class="my-4"
-      :rows="20" :first="(Number(data?.meta.pagination.page) - 1) * 20" :total-records="data?.meta.pagination.totalItems"
-      @update:first="page => navigateTo({
-        query: { page: page / 20 + 1 },
-      })"
-    />
+    <div class="mt-4 flex w-full items-center justify-between">
+      <p class="text-center text-muted-color">
+        {{ paginationDisplay }}
+      </p>
+      <Paginator
+        class="mt-2"
+        :rows="20" :first="(Number(data?.meta.pagination.page) - 1) * 20" :total-records="data?.meta.pagination.totalItems"
+        @update:first="page => navigateTo({
+          query: { page: page / 20 + 1 },
+        })"
+      />
+    </div>
   </div>
 </template>

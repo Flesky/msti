@@ -63,13 +63,17 @@ const { removeFromCart } = _cart
           <template #end>
             <div class="flex gap-2">
               <!-- TODO: Cart badge -->
-              <!-- <OverlayBadge severity="secondary" :value="cart.length ? cart.length : undefined" :pt="{}"> -->
-              <Button class="!size-10 shrink-0 text-white" @click="visible = true">
-                <template #icon>
-                  <Icon class="text-3xl" name="tabler:shopping-cart-filled" />
-                </template>
-              </Button>
-              <!-- </OverlayBadge> -->
+              <OverlayBadge
+                severity="secondary" :value="cart.length ? cart.length : undefined" :pt="!cart.length ? {
+                  pcBadge: { root: { style: { background: 'none' } } },
+                } : undefined"
+              >
+                <Button class="!size-10 shrink-0 text-white" @click="visible = true">
+                  <template #icon>
+                    <Icon class="text-3xl" name="tabler:shopping-cart-filled" />
+                  </template>
+                </Button>
+              </OverlayBadge>
             </div>
           </template>
         </Menubar>

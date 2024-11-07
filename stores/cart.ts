@@ -4,6 +4,7 @@ export const useCartStore = defineStore('cart', () => {
   const cart = ref<Array<{ product: Product, quantity: number }>>([])
   const toast = useToast()
 
+  // TODO: Add checkout button
   function addToCart(product: Product, quantity = 1) {
     const existing = cart.value.find(p => p.product.id === product.id)
     if (existing) {
