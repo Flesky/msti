@@ -179,7 +179,7 @@ function handleSubmit({ values }: { values: Schema }) {
                   {{ value ? value?.code : undefined }}
                 </template>
               </Select>
-              <InputMask v-if="$form.countryCode?.value.mask" name="phoneNumber" :mask="$form.countryCode.value.mask" placeholder="Your phone number" />
+              <InputMask v-if="$form.countryCode?.value.mask" :auto-clear="false" name="phoneNumber" :mask="$form.countryCode.value.mask" placeholder="Your phone number" />
             </InputGroup>
             <Message v-if="$form.phoneNumber?.invalid" severity="error" size="small" variant="simple">
               {{ $form.phoneNumber.error.message }}

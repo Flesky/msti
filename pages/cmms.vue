@@ -37,8 +37,10 @@ const items = [
   <div>
     <div class="bg-gray-100">
       <div class="mx-auto max-w-screen-xl px-4 py-12 text-center">
-        <div>CMMS</div>
-        <h1 class="text-4xl font-bold">
+        <div class="font-medium">
+          CMMS
+        </div>
+        <h1 class="mt-2 text-4xl font-bold">
           The All-in-One CMMS Solution
         </h1>
         <p class="mt-4">
@@ -63,7 +65,7 @@ const items = [
             <p class="font-bold uppercase text-blue-800">
               {{ item.header }}
             </p>
-            <h2 class="mt-2 text-2xl font-medium">
+            <h2 class="mt-2 text-2xl font-bold">
               {{ item.title }}
             </h2>
             <p class="mt-4">
