@@ -13,7 +13,7 @@ export const useCartStore = defineStore('cart', () => {
     else {
       cart.value.push({ product, quantity })
     }
-    toast.add({ severity: 'success', summary: `Added ${product.data.product_name} to cart`, life: 3000 })
+    toast.add({ severity: 'success', summary: `Added ${quantity}x ${product.data.product_name} to cart`, life: 3000 })
   }
 
   function updateQuantity(id: string, quantity: number) {

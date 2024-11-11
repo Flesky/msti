@@ -15,56 +15,59 @@ const { addToCart } = useCartStore()
 
 <template>
   <ClientOnly>
-    <div class="mx-auto mt-8 flex max-w-screen-xl flex-col justify-center gap-8 p-4 lg:flex-row">
-      <div class="w-full lg:max-w-xl">
-        <Galleria :value="product?.data.images" :num-visible="5">
-          <template #item="{ item }">
-            <img :src="item">
-          </template>
-          <template #thumbnail="{ item }">
-            <img class="max-h-16 border border-gray-200" :src="item">
-          </template>
-        </Galleria>
-      </div>
-      <div>
-        <h1 class="text-4xl font-medium">
-          {{ product?.data.product_name }}
-        </h1>
-        <p class="mt-2 text-muted-color">
-          Part number: {{ product?.data.part_number }}
-        </p>
-        <!--        TODO: Add category hyperlink -->
-
-        <div class="mt-12">
-          <label for="quantity" class="font-medium">Quantity</label>
-          <InputNumber v-model="quantity" input-id="quantity" class="ml-4 w-40 shrink-0" show-buttons button-layout="horizontal" :step="1" :min="1" fluid>
-            <template #decrementbuttonicon>
-              <Icon name="tabler:minus" />
+    <div class="mx-auto max-w-screen-xl p-4">
+      <Breadcrumb class="mt-4" :pt="{ root: 'p-0' }" :home="{ label: 'Home', url: '/' }" :model="[{ label: 'Products', url: '/products' }, { label: product?.data.product_name }]" />
+      <div class="mt-8 flex flex-col justify-center gap-8 lg:flex-row">
+        <div class="w-full shrink-0 lg:max-w-xl">
+          <Galleria :value="product?.data.images" :num-visible="5">
+            <template #item="{ item }">
+              <img :src="item">
             </template>
-            <template #incrementbuttonicon>
-              <Icon name="tabler:plus" />
+            <template #thumbnail="{ item }">
+              <img class="max-h-16 border border-gray-200" :src="item">
             </template>
-          </InputNumber>
+          </Galleria>
         </div>
-        <Button label="Add to cart" class="mt-4 w-full" @click="addToCart(product, quantity)" />
+        <div class="grow">
+          <h1 class="text-4xl font-medium">
+            {{ product?.data.product_name }}
+          </h1>
+          <p class="mt-2 text-muted-color">
+            Part number: {{ product?.data.part_number }}
+          </p>
+          <!--        TODO: Add category hyperlink -->
 
-        <template v-if="compatibilitySpecs">
+          <div class="mt-12">
+            <label for="quantity" class="font-medium">Quantity</label>
+            <InputNumber v-model="quantity" input-id="quantity" class="ml-4 w-40 shrink-0" show-buttons button-layout="horizontal" :step="1" :min="1" fluid>
+              <template #decrementbuttonicon>
+                <Icon name="tabler:minus" />
+              </template>
+              <template #incrementbuttonicon>
+                <Icon name="tabler:plus" />
+              </template>
+            </InputNumber>
+          </div>
+          <Button label="Add to cart" class="mt-4 w-full" @click="addToCart(product, quantity)" />
+
+          <template v-if="compatibilitySpecs">
+            <h2 class="mt-14 text-2xl font-medium">
+              Compatibility Information
+            </h2>
+            <DataTable class="mt-2" :value="compatibilitySpecs">
+              <Column header="Manufacturer" field="name" />
+              <Column header="Model" field="value" />
+            </DataTable>
+          </template>
+
           <h2 class="mt-14 text-2xl font-medium">
-            Compatibility Information
+            Technical Specifications
           </h2>
-          <DataTable class="mt-2" :value="compatibilitySpecs">
-            <Column header="Manufacturer" field="name" />
-            <Column header="Model" field="value" />
+          <DataTable class="mt-2" :value="technicalSpecs">
+            <Column field="name" />
+            <Column field="value" />
           </DataTable>
-        </template>
-
-        <h2 class="mt-14 text-2xl font-medium">
-          Technical Specifications
-        </h2>
-        <DataTable class="mt-2" :value="technicalSpecs">
-          <Column field="name" />
-          <Column field="value" />
-        </DataTable>
+        </div>
       </div>
     </div>
   </ClientOnly>

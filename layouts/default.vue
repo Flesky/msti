@@ -32,7 +32,7 @@ const visible = ref(false)
 
 const _cart = useCartStore()
 const { cart } = storeToRefs(_cart)
-const { removeFromCart } = _cart
+const { updateQuantity, removeFromCart } = _cart
 </script>
 
 <template>
@@ -43,6 +43,8 @@ const { removeFromCart } = _cart
           :pt="{
             root: 'border-0 px-4 rounded-none bg-primary-700 max-w-screen-xl mx-auto',
             rootList: 'bg-primary-700 rounded-none border-0',
+            start: 'grow md:grow-0',
+            button: 'order-2',
 
             itemContent: 'rounded-none',
 
@@ -62,7 +64,6 @@ const { removeFromCart } = _cart
 
           <template #end>
             <div class="flex gap-2">
-              <!-- TODO: Cart badge -->
               <OverlayBadge
                 severity="secondary" :value="cart.length ? cart.length : undefined" :pt="!cart.length ? {
                   pcBadge: { root: { style: { background: 'none' } } },
@@ -79,11 +80,11 @@ const { removeFromCart } = _cart
         </Menubar>
       </ClientOnly>
 
-      <Drawer v-model:visible="visible" position="right" header="Cart" class="w-96">
+      <Drawer v-model:visible="visible" position="right" header="Shopping cart" class="w-96">
         <DataView :value="cart">
           <template #list="{ items }">
             <div class="flex flex-col">
-              <div v-for="({ product, quantity }, index) in items" class="flex items-start gap-4 py-4" :class="{ 'border-t border-surface-200 dark:border-surface-700': index > 0 }">
+              <div v-for="({ product, quantity }, index) in items" class="flex items-start gap-4 pb-5" :class="{ 'border-t border-surface-200 pt-5 dark:border-surface-700': index > 0 }">
                 <img :src="product.data.images[0]" class="w-24 object-contain pt-2" :alt="`Image for ${product.data.product_name}`">
                 <div>
                   <h2 class="text-lg font-medium">
@@ -93,13 +94,31 @@ const { removeFromCart } = _cart
                     {{ product.data.part_number }}
                   </p>
 
-                  {{ quantity }}x
-                  <Button severity="danger" link @click="removeFromCart(product.id)">
-                    Remove
-                  </Button>
+                  <div class="mt-2 flex gap-4">
+                    <InputNumber class="mt-2" show-buttons button-layout="horizontal" :min="1" :max="100" fluid :default-value="quantity" @update:model-value="q => updateQuantity(product.id, q)">
+                      <template #incrementbuttonicon>
+                        <Icon name="tabler:plus" />
+                      </template>
+                      <template #decrementbuttonicon>
+                        <Icon name="tabler:minus" />
+                      </template>
+                    </InputNumber>
+
+                    <Button severity="danger" class="mt-1.5" link @click="removeFromCart(product.id)">
+                      Remove
+                    </Button>
+                  </div>
                 </div>
                 <!--                <InputNumber :default-value="Number(quantity)" :min="1" /> -->
               </div>
+            </div>
+          </template>
+          <template #empty>
+            <div class="space-y-2 p-4 text-center text-muted-color">
+              <Icon name="tabler:shopping-cart" class="text-5xl" />
+              <p class="text-lg">
+                Your cart is empty
+              </p>
             </div>
           </template>
         </DataView>
