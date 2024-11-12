@@ -12,6 +12,7 @@ const activeFilters = ref(data.value?.meta.filters)
 const searchQuery = ref(data.value?.meta.search)
 
 const { addToCart } = useCartStore()
+const { toggleLike, isLiked } = useWishlistStore()
 
 const paginationDisplay = computed(() => {
   const page = data.value?.meta.pagination.page
@@ -23,7 +24,7 @@ const paginationDisplay = computed(() => {
 </script>
 
 <template>
-  <div class="mx-auto mt-8 max-w-screen-xl p-4">
+  <div class="mx-auto max-w-screen-xl px-4 py-12">
     <div class="flex flex-col justify-between gap-x-12 gap-y-4 md:flex-row">
       <h1 class="text-4xl font-medium">
         Products
@@ -69,9 +70,9 @@ const paginationDisplay = computed(() => {
       />
     </div>
 
-    <div class="mt-4 grid grid-cols-2 gap-2 md:grid-cols-4 xl:grid-cols-5">
+    <div class="mt-4 grid grid-cols-2 gap-1 md:grid-cols-4 xl:grid-cols-5">
       <NuxtLink v-for="product in data?.products" v-slot="{ navigate }" :key="product.url" :to="`/products/${product.id}`" custom>
-        <Card class="border" :pt="{ root: 'rounded-none', title: 'min-h-40' }" @click="navigate">
+        <Card :pt="{ root: 'rounded-none border shadow-none', title: 'min-h-40' }" @click="navigate">
           <template #header>
             <img class="aspect-[3/2] object-cover" alt="user header" :src="product.data.images[0]">
           </template>
@@ -85,13 +86,24 @@ const paginationDisplay = computed(() => {
             </div>
           </template>
           <template #footer>
-            <Button label="Add to cart" class="w-full" @click.prevent="addToCart(product)" />
+            <div class="mt-2 flex items-center gap-1.5" @click.prevent="">
+              <Button class="shrink-0" variant="outlined" @click="">
+                <template #icon>
+                  <Icon name="tabler:heart" class="text-xl" />
+                </template>
+              </Button>
+              <Button label="Add to cart" class="grow" @click="addToCart(product)">
+                <template #icon>
+                  <Icon name="tabler:shopping-cart" class="text-xl" />
+                </template>
+              </Button>
+            </div>
           </template>
         </Card>
       </NuxtLink>
     </div>
 
-    <div class="mt-4 flex w-full items-center justify-between">
+    <div class="mt-4 flex w-full flex-col items-center justify-between gap-x-4 md:flex-row">
       <p class="text-center text-muted-color">
         {{ paginationDisplay }}
       </p>

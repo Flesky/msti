@@ -16,3 +16,7 @@ img.hero {
 .p-message-error.p-message-simple {
     color: var(--p-message-error-color);
 }
+
+.p-breadcrumb, .p-paginator {
+    @apply !bg-transparent;
+}

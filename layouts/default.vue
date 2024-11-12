@@ -80,6 +80,11 @@ const { updateQuantity, removeFromCart } = _cart
         </Menubar>
       </ClientOnly>
 
+      <!--   TODO: Change remove text to icon -->
+      <!--      Transfer notif to right -->
+      <!--      Wishlist functionality -->
+      <!--      Product quantity in list -->
+
       <Drawer v-model:visible="visible" position="right" header="Shopping cart" class="w-96">
         <DataView :value="cart">
           <template #list="{ items }">
@@ -95,7 +100,7 @@ const { updateQuantity, removeFromCart } = _cart
                   </p>
 
                   <div class="mt-2 flex gap-4">
-                    <InputNumber class="mt-2" show-buttons button-layout="horizontal" :min="1" :max="100" fluid :default-value="quantity" @update:model-value="q => updateQuantity(product.id, q)">
+                    <InputNumber class="mt-2" show-buttons button-layout="horizontal" :min="1" fluid :default-value="quantity" @update:model-value="q => updateQuantity(product.id, q)">
                       <template #incrementbuttonicon>
                         <Icon name="tabler:plus" />
                       </template>
@@ -105,7 +110,9 @@ const { updateQuantity, removeFromCart } = _cart
                     </InputNumber>
 
                     <Button severity="danger" class="mt-1.5" link @click="removeFromCart(product.id)">
-                      Remove
+                      <template #icon>
+                        <Icon class="text-2xl" name="tabler:trash" />
+                      </template>
                     </Button>
                   </div>
                 </div>
@@ -137,9 +144,11 @@ const { updateQuantity, removeFromCart } = _cart
         </template>
       </Drawer>
     </div>
-    <NuxtPage />
+    <div class="bg-gray-100">
+      <NuxtPage />
+    </div>
     <ScrollTop v-show="!visible" />
-    <Toast position="top-left" />
+    <Toast position="top-right" />
     <DynamicDialog />
 
     <footer class="bg-gray-800 p-4 text-center text-white">
