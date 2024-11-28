@@ -1,3 +1,4 @@
+import containerQueries from '@tailwindcss/container-queries'
 import primeui from 'tailwindcss-primeui'
 
 export default {
@@ -33,5 +34,5 @@ export default {
       },
     },
   },
-  plugins: [primeui],
+  plugins: [primeui, containerQueries],
 }

@@ -94,7 +94,7 @@ const benefits = [
           rgba(0, 0, 0, 0.5)
         ), url('/images/hero/rtls.jpg')" class="hero flex flex-col justify-center bg-black bg-opacity-50 text-white"
       >
-        <div class="mx-auto flex w-full max-w-screen-xl flex-col-reverse items-center gap-8 px-4 py-8 md:flex-row">
+        <div class="mx-auto flex w-full max-w-screen-2xl flex-col-reverse items-center gap-8 px-4 py-8 md:flex-row">
           <div class="space-y-4">
             <div class="text-4xl font-bold">
               Real-time Location System
@@ -127,7 +127,7 @@ const benefits = [
       <p class="mt-4">
         Modules are complete with dashboards, mapping tools, reports, etc. Simple to deploy, simple to use, each module helps you derive value quickly.
       </p>
-      <div class="mx-auto mt-6 grid max-w-screen-xl grid-cols-1 gap-x-3 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="mx-auto mt-6 grid max-w-screen-2xl grid-cols-1 gap-x-3 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
         <Card v-for="(solution, i) in solutions">
           <template #header>
             <!--            <img :src="`/images/content/services/${i + 1}.webp`" class="w-full object-cover" :alt="solution.name"> -->

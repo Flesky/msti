@@ -36,7 +36,7 @@ const items = [
 <template>
   <div>
     <div class="bg-gray-100">
-      <div class="mx-auto max-w-screen-xl px-4 py-12 text-center">
+      <div class="mx-auto max-w-screen-2xl px-4 py-12 text-center">
         <div class="font-medium text-secondary-800">
           CMMS
         </div>
@@ -59,7 +59,7 @@ const items = [
     </div>
 
     <section>
-      <div v-for="(item, i) in items" class="mx-auto flex max-w-screen-xl flex-col items-center px-4 py-12">
+      <div v-for="(item, i) in items" class="mx-auto flex max-w-screen-2xl flex-col items-center px-4 py-12">
         <div class="flex flex-col gap-4" :class="i % 2 ? 'md:flex-row-reverse' : undefined">
           <div class="max-w-xl">
             <p class="font-bold uppercase text-secondary-800">

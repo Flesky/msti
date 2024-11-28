@@ -43,7 +43,7 @@ const services = [
         <div class="relative">
           <img class="hero w-full object-cover" src="/images/hero/home-1.jpg">
           <div class="absolute inset-0 flex flex-col justify-end bg-black bg-opacity-50 text-white">
-            <div class="mx-auto w-full max-w-screen-xl px-3 pb-24">
+            <div class="mx-auto w-full max-w-screen-2xl px-3 pb-24">
               <div class="text-4xl font-bold">
                 Advanced Medical Solution
               </div>
@@ -59,7 +59,7 @@ const services = [
         <div class="relative">
           <img class="hero w-full object-cover" src="/images/hero/home-2.jpg">
           <div class="absolute inset-0 flex flex-col justify-end bg-black bg-opacity-50 text-white">
-            <div class="mx-auto w-full max-w-screen-xl px-3 pb-24">
+            <div class="mx-auto w-full max-w-screen-2xl px-3 pb-24">
               <div class="text-4xl font-bold">
                 Innovative Healthcare
               </div>
@@ -73,7 +73,7 @@ const services = [
     </Swiper>
 
     <section class="bg-gray-100">
-      <div class="mx-auto max-w-screen-xl px-4 py-12 text-center">
+      <div class="mx-auto max-w-screen-2xl px-4 py-12 text-center">
         <h1 class="text-4xl font-bold">
           Our Services
         </h1>

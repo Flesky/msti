@@ -15,7 +15,7 @@ const { addToCart } = useCartStore()
 
 <template>
   <ClientOnly>
-    <div class="mx-auto flex max-w-screen-xl flex-col gap-4 p-4">
+    <div class="mx-auto flex max-w-screen-2xl flex-col gap-4 p-4">
       <Breadcrumb :pt="{ root: 'p-0' }" :home="{ label: 'Home', url: '/' }" :model="[{ label: 'Products', url: '/products' }, { label: product?.data.product_name }]" />
 
       <Card :pt="{ root: 'rounded-none' }">
@@ -24,7 +24,7 @@ const { addToCart } = useCartStore()
             <div class="w-full shrink-0 lg:max-w-lg">
               <Galleria :value="product?.data.images" :num-visible="5">
                 <template #item="{ item }">
-                  <img :src="item">
+                  <Image :src="item" preview />
                 </template>
                 <template #thumbnail="{ item }">
                   <img class="max-h-16 border border-gray-200" :src="item">

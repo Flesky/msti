@@ -7,7 +7,7 @@
     <div class="relative">
       <img class="hero w-full object-cover" src="/images/hero/about.jpg">
       <div class="absolute inset-0 flex flex-col justify-center bg-black bg-opacity-50 text-center text-white">
-        <div class="mx-auto w-full max-w-screen-xl p-3">
+        <div class="mx-auto w-full max-w-screen-2xl p-3">
           <div class="text-4xl font-bold">
             About Medical Solution
           </div>
@@ -19,7 +19,7 @@
     </div>
 
     <section>
-      <div class="mx-auto max-w-screen-xl px-4 py-12 text-center">
+      <div class="mx-auto max-w-screen-2xl px-4 py-12 text-center">
         <p class="text-2xl font-light">
           "We are committed to transforming healthcare through innovative solutions. Founded on the principles of excellence and accessibility, we strive to make cutting-edge healthcare solutions available to everyone. Our team of dedicated professionals works tirelessly to ensure the highest standards of quality and patient satisfaction. We believe that by pushing the boundaries of medical technology, we can create a healthier future for all."
         </p>
@@ -27,7 +27,7 @@
     </section>
 
     <section class="bg-gray-100">
-      <div class="mx-auto grid max-w-screen-xl gap-8 px-4 py-12 md:grid-cols-2 md:px-24">
+      <div class="mx-auto grid max-w-screen-2xl gap-8 px-4 py-12 md:grid-cols-2 md:px-24">
         <div>
           <h1 class="font-bold text-primary-700">
             OUR MISSION
@@ -58,7 +58,7 @@
     <!-- TODO: Cards -->
 
     <section>
-      <div class="mx-auto flex max-w-screen-xl flex-col items-center justify-evenly gap-8 px-4 py-12 text-center md:flex-row">
+      <div class="mx-auto flex max-w-screen-2xl flex-col items-center justify-evenly gap-8 px-4 py-12 text-center md:flex-row">
         <div class="flex flex-col items-center">
           <img src="/images/content/about/founder.png" class="w-32 rounded-full border" alt="Founder">
           <h1 class="mt-1 text-2xl font-medium">

@@ -5,7 +5,7 @@ import PRODUCTS from '~/mock/products'
 
 // Filter keys must be unique
 // Nodes can't have commas!
-const FILTER_OPTIONS: TreeNode[] = [
+const CATEGORY_OPTIONS: TreeNode[] = [
   {
     key: 'EKG/ECG',
     label: 'EKG/ECG',
@@ -69,7 +69,18 @@ const FILTER_OPTIONS: TreeNode[] = [
   },
 ]
 
-function flattenAndAssignIds(tree: TreeNode[]): { availableFilters: TreeNode[], mappedFilters: Map<string, string> } {
+const BRAND_OPTIONS = [
+  'Philips',
+  'GE',
+  'Mindray',
+  'Masimo',
+  'Siemens',
+  'Spacelabs',
+  'Biolight',
+  'Nellcor',
+]
+
+function flattenNodesAndAssignIds(tree: TreeNode[]): { treeNodes: TreeNode[], mappedFilters: Map<string, string> } {
   let i = 1
   const mappedFilters = new Map<string, string>()
 
@@ -84,12 +95,12 @@ function flattenAndAssignIds(tree: TreeNode[]): { availableFilters: TreeNode[], 
     return newNode
   }
 
-  return { availableFilters: tree.map(assignId), mappedFilters }
+  return { treeNodes: tree.map(assignId), mappedFilters }
 }
 
-const { availableFilters, mappedFilters } = flattenAndAssignIds(FILTER_OPTIONS)
+const { treeNodes, mappedFilters } = flattenNodesAndAssignIds(CATEGORY_OPTIONS)
 
-function showFilterStatus(appliedFilters: string[]) {
+function showTreeStatus(appliedFilters: string[]) {
   const appliedFilterSet = new Set(appliedFilters)
   const status: Record<string, { checked: boolean, partiallyChecked: boolean }> = {}
 
@@ -114,7 +125,7 @@ function showFilterStatus(appliedFilters: string[]) {
     }
   }
 
-  availableFilters.forEach(traverse)
+  treeNodes.forEach(traverse)
   return status
 }
 
@@ -130,54 +141,70 @@ function showFilteredProducts(data: Product[], appliedFilters: string[]) {
 }
 
 const paginationSchema = z.object({
-  page: z.coerce.number().int().positive().optional(),
-  search: z.string().optional(),
-  filters: z.string().transform(val => val.length ? val.split(',') : undefined).optional(), // Example: 22,23,24,27
+  page: z.coerce.number().int().positive().catch(1).optional(),
+  search: z.string().catch('').optional(),
+  categories: z.string().transform(val => val.length ? val.split(',') : undefined).optional(), // Example: 22,23,24,27
+  brands: z.string().transform(val => val.length ? val.split(',') : undefined).optional(), // Example: Philips,GE
+  sort: z.enum(['default', 'name', 'part_number']).optional(),
 })
 
 interface Products {
   products: Product[]
-  filters: TreeNode[]
+  categories: TreeNode[]
+  brands: string[]
   meta: {
     pagination: {
       totalItems: number
       page: number
       perPage: number
     }
-    filters: Record<string, {
+    categories: Record<string, {
       checked: boolean
       partiallyChecked: boolean
     }>
     search: string
+    sort: 'default' | 'name' | 'part_number'
   }
 }
 
 export default defineEventHandler(async (event): Promise<Products> => {
   const { data: params } = await getValidatedQuery(event, paginationSchema.safeParse)
-  const { page = 1, filters, search } = params || { }
+  const { page = 1, categories, search, sort, brands } = params || { }
 
   const perPage = 20
   const start = (page - 1) * perPage
   const end = start + perPage
 
-  let products = PRODUCTS
+  let products = JSON.parse(JSON.stringify(PRODUCTS))
 
-  if (filters)
-    products = showFilteredProducts(products, filters)
+  if (brands)
+    products = products.filter(product => brands.some(brand => product.data.product_name.toLowerCase().includes(brand.toLowerCase())))
+  if (categories)
+    products = showFilteredProducts(products, categories)
   if (search)
     products = products.filter(product => Object.values(product).join(' ').toLowerCase().includes(search.toLowerCase()))
+  switch (sort) {
+    case 'name':
+      products = products.sort((a, b) => a.data.product_name.toLowerCase().localeCompare(b.data.product_name.toLowerCase()))
+      break
+    case 'part_number':
+      products = products.sort((a, b) => a.data.part_number.toLowerCase().localeCompare(b.data.part_number.toLowerCase()))
+      break
+  }
 
   return {
     products: products.slice(start, end),
-    filters: availableFilters,
+    categories: treeNodes,
+    brands: BRAND_OPTIONS,
     meta: {
       pagination: {
         totalItems: products.length,
         page,
         perPage,
       },
-      filters: showFilterStatus(filters || []),
+      categories: showTreeStatus(categories || []),
       search: search || '',
+      sort: sort || 'default',
     },
   }
 })

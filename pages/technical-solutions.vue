@@ -152,7 +152,7 @@ const solutions = [
   <div class="relative">
     <img class="hero w-full object-cover" src="/images/hero/technical-solutions.jpg">
     <div class="absolute inset-0 flex flex-col justify-center bg-black bg-opacity-50 text-center text-white">
-      <div class="mx-auto w-full max-w-screen-xl p-3">
+      <div class="mx-auto w-full max-w-screen-2xl p-3">
         <div class="text-4xl font-bold">
           Our Technical Solutions
         </div>
@@ -161,7 +161,7 @@ const solutions = [
   </div>
 
   <section class="bg-gray-100">
-    <div class="mx-auto grid max-w-screen-xl grid-cols-1 gap-4 px-4 py-12 text-center sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+    <div class="mx-auto grid max-w-screen-2xl grid-cols-1 gap-4 px-4 py-12 text-center sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
       <NuxtLink
         v-for="solution in solutions" :key="solution.title"
         v-slot="{ navigate }" :to="`#${solution.id}`" custom

@@ -140,7 +140,7 @@ function handleSubmit({ values }: { values: Schema }) {
 
 <template>
   <div class="bg-secondary-100 px-4 py-16">
-    <div class="mx-auto flex max-w-screen-xl flex-col md:flex-row">
+    <div class="mx-auto flex max-w-screen-2xl flex-col md:flex-row">
       <section class="w-full rounded-t-lg border bg-white p-6 md:rounded-none md:rounded-l-lg">
         <h1>
           Send us a message

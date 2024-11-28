@@ -41,7 +41,7 @@ const { updateQuantity, removeFromCart } = _cart
       <ClientOnly>
         <Menubar
           :pt="{
-            root: 'border-0 px-4 rounded-none bg-primary-700 max-w-screen-xl mx-auto',
+            root: 'border-0 px-4 rounded-none bg-primary-700 max-w-screen-2xl mx-auto',
             rootList: 'bg-primary-700 rounded-none border-0',
             start: 'grow md:grow-0',
             button: 'order-2',
