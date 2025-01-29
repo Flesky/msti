@@ -53,11 +53,31 @@ export default defineNuxtConfig({
       enabled: true,
     },
   },
+  runtimeConfig: {
+    strapiURL: '',
+    strapiSecret: '',
+    regionId: 1,
+  },
+
   modules: ['@nuxtjs/tailwindcss', '@primevue/nuxt-module', '@nuxt/icon', '@pinia/nuxt', 'pinia-plugin-persistedstate/nuxt', '@vueuse/nuxt', 'nuxt-swiper'],
 
-  tailwindcss: {
-    cssPath: '~/assets/css/tailwind.css',
+  app: {
+    head: {
+      style: [
+        {
+          textContent: [
+            '@layer',
+            ['tailwind-base', 'primevue', 'tailwind-utilities'].join(', '),
+            ';',
+          ].join(' '),
+        },
+      ],
+    },
   },
+
+  css: [
+    '~/assets/css/main.css',
+  ],
 
   primevue: {
     options: {
@@ -66,7 +86,6 @@ export default defineNuxtConfig({
         options: {
           cssLayer: {
             name: 'primevue',
-            order: 'tailwind-base, primevue, tailwind-utilities',
           },
           darkModeSelector: 'none',
         },

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const { data: banners } = await useFetch('/api/homepage')
 const services = [
   {
     name: 'Medical Equipment Supply',
@@ -39,32 +40,16 @@ const services = [
       pagination
       class="select-none text-center"
     >
-      <SwiperSlide>
+      <SwiperSlide v-for="banner in banners">
         <div class="relative">
-          <img class="hero w-full object-cover" src="/images/hero/home-1.jpg">
+          <img class="hero w-full object-cover" :src="banner.backgroundImage">
           <div class="absolute inset-0 flex flex-col justify-end bg-black bg-opacity-50 text-white">
             <div class="mx-auto w-full max-w-screen-2xl px-3 pb-24">
               <div class="text-4xl font-bold">
-                Advanced Medical Solution
+                {{ banner.title }}
               </div>
               <p class="mt-4 text-lg">
-                Bringing you the latest in medical technology.
-              </p>
-            </div>
-          </div>
-        </div>
-      </SwiperSlide>
-
-      <SwiperSlide>
-        <div class="relative">
-          <img class="hero w-full object-cover" src="/images/hero/home-2.jpg">
-          <div class="absolute inset-0 flex flex-col justify-end bg-black bg-opacity-50 text-white">
-            <div class="mx-auto w-full max-w-screen-2xl px-3 pb-24">
-              <div class="text-4xl font-bold">
-                Innovative Healthcare
-              </div>
-              <p class="mt-4 text-lg">
-                Improving patient outcomes through innovation.
+                {{ banner.subtitle }}
               </p>
             </div>
           </div>

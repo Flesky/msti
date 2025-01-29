@@ -37,7 +37,7 @@ const { updateQuantity, removeFromCart } = _cart
 
 <template>
   <div>
-    <div class="sticky top-0 z-[1000] bg-primary-700">
+    <div class="sticky top-0 z-[1000] h-[70px] bg-primary-700">
       <ClientOnly>
         <Menubar
           :pt="{
