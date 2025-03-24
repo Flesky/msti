@@ -93,9 +93,15 @@ export interface Root {
   }
 }
 
+
 export default defineEventHandler(async () => {
   const { strapiURL, regionId } = useRuntimeConfig()
+  console.log('Runtime Config - strapiURL:', strapiURL, 'regionId:', regionId)
+  console.log('process.env.NUXT_REGION_ID:', process.env.NUXT_REGION_ID);
+
+  
   const { data } = await api<Root>(`/homepages?filters[id][$eq]=${regionId}&populate[0]=banners&populate[1]=banners.backgroundImage`)
+  
   return data[0].banners.map(({ title, subtitle, backgroundImage }) => ({
     title,
     subtitle,
