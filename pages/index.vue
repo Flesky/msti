@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { data: banners } = await useFetch('/api/homepage')
+const { data: banners } = await useFetch('/api/cms/homepage')
 const services = [
   {
     name: 'Medical Equipment Supply',

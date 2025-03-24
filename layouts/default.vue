@@ -38,47 +38,45 @@ const { updateQuantity, removeFromCart } = _cart
 <template>
   <div>
     <div class="sticky top-0 z-[1000] h-[70px] bg-primary-700">
-      <ClientOnly>
-        <Menubar
-          :pt="{
-            root: 'border-0 px-4 rounded-none bg-primary-700 max-w-screen-2xl mx-auto',
-            rootList: 'bg-primary-700 rounded-none border-0',
-            start: 'grow md:grow-0',
-            button: 'order-2',
+      <Menubar
+        :pt="{
+          root: 'border-0 px-4 rounded-none bg-primary-700 max-w-screen-2xl mx-auto',
+          rootList: 'bg-primary-700  rounded-none border-0',
+          start: 'grow md:grow-0',
+          button: 'order-2',
 
-            itemContent: 'rounded-none',
+          itemContent: 'rounded-none text-white',
 
-            submenu: 'bg-primary-700 rounded-none border-primary-800 border-2',
-          }" :model="items"
-        >
-          <template #start>
-            <img class="w-32" src="/images/logo.png">
-          </template>
-          <template #buttonicon="{ toggleCallback }">
-            <Button class="!size-10 shrink-0 text-white" @click="toggleCallback">
-              <template #icon>
-                <Icon class="text-3xl" name="tabler:menu-2" />
-              </template>
-            </Button>
-          </template>
+          submenu: 'bg-primary-700 rounded-none border-primary-800 border-2',
+        }" :model="items"
+      >
+        <template #start>
+          <img class="w-32" src="/images/logo.png">
+        </template>
+        <template #buttonicon="{ toggleCallback }">
+          <Button class="!size-10 shrink-0 text-white" @click="toggleCallback">
+            <template #icon>
+              <Icon class="text-3xl" name="tabler:menu-2" />
+            </template>
+          </Button>
+        </template>
 
-          <template #end>
-            <div class="flex gap-2">
-              <OverlayBadge
-                severity="secondary" :value="cart.length ? cart.length : undefined" :pt="!cart.length ? {
-                  pcBadge: { root: { style: { background: 'none' } } },
-                } : undefined"
-              >
-                <Button class="!size-10 shrink-0 text-white" @click="visible = true">
-                  <template #icon>
-                    <Icon class="text-3xl" name="tabler:shopping-cart-filled" />
-                  </template>
-                </Button>
-              </OverlayBadge>
-            </div>
-          </template>
-        </Menubar>
-      </ClientOnly>
+        <template #end>
+          <div class="flex gap-2">
+            <OverlayBadge
+              severity="secondary" :value="cart.length ? cart.length : undefined" :pt="!cart.length ? {
+                pcBadge: { root: { style: { background: 'none' } } },
+              } : undefined"
+            >
+              <Button class="!size-10 shrink-0 text-white" @click="visible = true">
+                <template #icon>
+                  <Icon class="text-3xl" name="tabler:shopping-cart-filled" />
+                </template>
+              </Button>
+            </OverlayBadge>
+          </div>
+        </template>
+      </Menubar>
 
       <!--   TODO: Change remove text to icon -->
       <!--      Transfer notif to right -->
@@ -90,13 +88,13 @@ const { updateQuantity, removeFromCart } = _cart
           <template #list="{ items }">
             <div class="flex flex-col">
               <div v-for="({ product, quantity }, index) in items" class="flex items-start gap-4 pb-5" :class="{ 'border-t border-surface-200 pt-5 dark:border-surface-700': index > 0 }">
-                <img :src="product.data.images[0]" class="w-24 object-contain pt-2" :alt="`Image for ${product.data.product_name}`">
+                <img :src="product.images.length ? product.images[0] : ''" class="w-24 object-contain pt-2" :alt="`Image for ${product.product_name}`">
                 <div>
                   <h2 class="text-lg font-medium">
-                    {{ product.data.product_name }}
+                    {{ product.product_name }}
                   </h2>
                   <p class="mt-1 text-muted-color">
-                    {{ product.data.part_number }}
+                    {{ product.part_number }}
                   </p>
 
                   <div class="mt-2 flex gap-4">

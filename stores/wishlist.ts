@@ -1,4 +1,4 @@
-type Id = string
+type Id = string | number
 
 export const useWishlistStore = defineStore('wishlist', () => {
   const wishlist = ref<Array<Id>>([])

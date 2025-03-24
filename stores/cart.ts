@@ -1,4 +1,4 @@
-import type { Product } from '~/mock/products'
+import type { Product } from '~/server/api/products/[product_id]'
 
 export const useCartStore = defineStore('cart', () => {
   const cart = ref<Array<{ product: Product, quantity: number }>>([])
@@ -13,7 +13,7 @@ export const useCartStore = defineStore('cart', () => {
     else {
       cart.value.push({ product, quantity })
     }
-    toast.add({ severity: 'success', summary: `Added ${quantity}x ${product.data.product_name} to cart`, life: 3000 })
+    toast.add({ severity: 'success', summary: `Added ${quantity}x ${product.product_name} to cart`, life: 3000 })
   }
 
   function updateQuantity(id: string, quantity: number) {
@@ -26,12 +26,12 @@ export const useCartStore = defineStore('cart', () => {
   function removeFromCart(id: string) {
     const index = cart.value.findIndex(p => p.product.id === id)
     if (index !== -1) {
-      toast.add({ severity: 'success', summary: `Removed ${cart.value.splice(index, 1)[0].product.data.product_name} from cart`, life: 3000 })
+      toast.add({ severity: 'success', summary: `Removed ${cart.value.splice(index, 1)[0].product.product_name} from cart`, life: 3000 })
     }
   }
 
   function checkout() {
-    const items = cart.value.map(entry => `${entry.quantity}x ${entry.product.data.product_name} (PN: ${entry.product.data.part_number})`).join('\n')
+    const items = cart.value.map(entry => `${entry.quantity}x ${entry.product.product_name} (PN: ${entry.product.part_number})`).join('\n')
     cart.value = []
     console.log(items)
     return items
