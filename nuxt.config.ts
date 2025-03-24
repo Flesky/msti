@@ -54,13 +54,9 @@ export default defineNuxtConfig({
     },
   },
   runtimeConfig: {
-    strapiURL: process.env.NUXT_STRAPI_URL,
-    strapiSecret: process.env.NUXT_STRAPI_SECRET,
-    regionId: process.env.NUXT_REGION_ID ? Number(process.env.NUXT_REGION_ID) : 1,
-    public: {
-      regionId: process.env.NUXT_REGION_ID ? Number(process.env.NUXT_REGION_ID) : 1,
-      strapiURL: process.env.NUXT_STRAPI_URL
-    }
+    strapiURL: '',
+    strapiSecret: '',
+    regionId: 1,
   },
 
   modules: ['@nuxtjs/tailwindcss', '@primevue/nuxt-module', '@nuxt/icon', '@pinia/nuxt', 'pinia-plugin-persistedstate/nuxt', '@vueuse/nuxt', 'nuxt-swiper'],
