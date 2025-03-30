@@ -8,7 +8,11 @@ const items = ref([
   },
   {
     label: 'Products',
-    url: '/products',
+    // url: '/products',
+    items: [
+      { label: 'Unimed', url: '/products/' },
+      { label: 'Rigel', url: '/rigel/' },
+    ],
   },
   {
     label: 'Solutions',
@@ -41,7 +45,7 @@ const { updateQuantity, removeFromCart } = _cart
       <Menubar
         :pt="{
           root: 'border-0 px-4 rounded-none bg-primary-700 max-w-screen-2xl mx-auto',
-          rootList: 'bg-primary-700  rounded-none border-0',
+          rootList: 'bg-primary-700 rounded-none border-0',
           start: 'grow md:grow-0',
           button: 'order-2',
 

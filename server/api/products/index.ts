@@ -73,12 +73,12 @@ export default defineEventHandler(async (event) => {
   const params = await getValidatedQuery(event, getSchema.parse)
   const { page, pageSize, category, search, brand } = params
 
-  const url = `/products?pagination[page]=${page}&pagination[pageSize]=${pageSize}`
-    + `${category ? `&filters[product_category_string][$eq]=${category}` : ''}`
-    + `${brand ? `&filters[product_name][$containsi]=${brand}` : ''}`
-    + `${search ? `&filters[product_name][$containsi]=${search}` : ''}`
-  console.log(url)
+  const url = `/products?page=${page}&pageSize=${pageSize}`
+    + `${category ? `&category=${category}` : ''}`
+    + `${brand ? `&brand=${brand}` : ''}`
+    + `${search ? `&search=${search}` : ''}`
   const res = await api<Root>(url)
+  console.log(`SUCCESS: ${url}`)
   return {
     ...res,
     categories,

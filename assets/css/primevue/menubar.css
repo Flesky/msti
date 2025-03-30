@@ -16,7 +16,7 @@
 }
 
 .p-menubar-root-list {
-    @apply items-center flex-wrap gap-2
+    @apply items-center flex-wrap gap-2 mx-auto
 }
 
 .p-menubar-root-list > .p-menubar-item > .p-menubar-item-content {
@@ -106,7 +106,7 @@
 }
 
 .p-menubar-end {
-    @apply ms-auto self-center
+    @apply self-center
 }
 
 .p-menubar-button {

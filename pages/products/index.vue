@@ -2,16 +2,16 @@
 import { breakpointsTailwind } from '@vueuse/core'
 import { Button, Panel } from 'primevue'
 
-const SORT_OPTIONS = [{
-  name: 'Default sort',
-  query: 'default',
-}, {
-  name: 'Sort by product name',
-  query: 'name',
-}, {
-  name: 'Sort by part number',
-  query: 'part_number',
-}]
+// const SORT_OPTIONS = [{
+//   name: 'Default sort',
+//   query: 'default',
+// }, {
+//   name: 'Sort by product name',
+//   query: 'name',
+// }, {
+//   name: 'Sort by part number',
+//   query: 'part_number',
+// }]
 
 const route = useRoute()
 const search = ref(route.query.search || '')
@@ -24,7 +24,7 @@ const params = computed(() => ({
   brand: route.query.brand,
 }))
 
-const { data } = await useFetch(() => `/api/products`, {
+const { data, status } = await useFetch(() => `/api/products`, {
   params,
 })
 
@@ -34,7 +34,7 @@ const { toggleLike, isLiked } = useWishlistStore()
 const paginationDisplay = computed(() => {
   if (!data.value)
     return ''
-  const { page, pageSize, total } = data.value.meta.pagination
+  const { page, pageSize, total } = data.value?.meta?.pagination
   return `Showing ${((page - 1) * pageSize) + 1} to ${Math.min(page * pageSize, total)} of ${total} products`
 })
 
@@ -47,17 +47,21 @@ const isMobile = useBreakpoints(breakpointsTailwind).smallerOrEqual('lg')
       Products
     </h1>
 
-    <div class="mt-6 flex w-full flex-col items-center justify-between gap-x-4 lg:flex-row">
+    <div class="mt-6 flex h-12 w-full flex-col items-center justify-between gap-x-4 lg:flex-row">
       <p class="text-center text-muted-color">
         {{ paginationDisplay }}
       </p>
       <Paginator
+        v-if="status === 'success'"
         class="mt-2"
         :rows="20" :first="(Number(data?.meta.pagination.page) - 1) * 20" :total-records="data?.meta.pagination.total"
         @update:first="page => navigateTo({
           query: { page: page / 20 + 1 },
         })"
       />
+      <p v-else>
+        Loading...
+      </p>
     </div>
 
     <div class="mt-2 flex flex-col gap-4 lg:flex-row">
@@ -179,7 +183,7 @@ const isMobile = useBreakpoints(breakpointsTailwind).smallerOrEqual('lg')
       </component>
 
       <div class="grow @container">
-        <div v-if="!data.meta.pagination.total">
+        <div v-if="!data?.meta.pagination.total">
           No products found.
         </div>
 
@@ -187,7 +191,8 @@ const isMobile = useBreakpoints(breakpointsTailwind).smallerOrEqual('lg')
           <NuxtLink v-for="product in data?.data" v-slot="{ navigate }" :key="product.id" :to="`/products/${product.product_id}`" custom>
             <Card :pt="{ root: 'rounded-none border shadow-none', title: 'min-h-40' }" @click="navigate">
               <template #header>
-                <Image class="w-full" image-class="aspect-[3/2] w-full object-cover" :src="product.images[0]" />
+                <Image v-if="product.images?.length" class="w-full" image-class="aspect-[3/2] w-full object-cover" :src="product.images[0]" />
+                <div v-else class="aspect-[3/2] bg-surface-200" />
               </template>
               <template #title>
                 <h2 class="line-clamp-3">
@@ -214,17 +219,17 @@ const isMobile = useBreakpoints(breakpointsTailwind).smallerOrEqual('lg')
       </div>
     </div>
 
-    <div class="mt-4 flex w-full flex-col items-center justify-between gap-x-4 lg:flex-row">
-      <p class="text-center text-muted-color">
-        {{ paginationDisplay }}
-      </p>
-      <Paginator
-        class="mt-2"
-        :rows="20" :first="(Number(data?.meta.pagination.page) - 1) * 20" :total-records="data?.meta.pagination.total"
-        @update:first="page => navigateTo({
-          query: { page: page / 20 + 1 },
-        })"
-      />
-    </div>
+    <!--    <div class="mt-4 flex w-full flex-col items-center justify-between gap-x-4 lg:flex-row"> -->
+    <!--      <p class="text-center text-muted-color"> -->
+    <!--        {{ paginationDisplay }} -->
+    <!--      </p> -->
+    <!--      <Paginator -->
+    <!--        class="mt-2" -->
+    <!--        :rows="20" :first="(Number(data?.meta.pagination.page) - 1) * 20" :total-records="data?.meta.pagination.total" -->
+    <!--        @update:first="page => navigateTo({ -->
+    <!--          query: { page: page / 20 + 1 }, -->
+    <!--        })" -->
+    <!--      /> -->
+    <!--    </div> -->
   </div>
 </template>
