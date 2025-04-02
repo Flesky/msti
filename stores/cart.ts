@@ -1,4 +1,4 @@
-import type { Product } from '~/server/api/products/[product_id]'
+import type { Product } from '~/server/api/products/unimed/[product_id]'
 
 export const useCartStore = defineStore('cart', () => {
   const cart = ref<Array<{ product: Product, quantity: number }>>([])

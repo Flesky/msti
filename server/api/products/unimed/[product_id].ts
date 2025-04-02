@@ -28,7 +28,7 @@ const getByProductIdSchema = z.object({
 export default defineEventHandler(async (event) => {
   const { product_id } = await getValidatedRouterParams(event, getByProductIdSchema.parse)
 
-  const url = `/products?filters[product_id][$eq]=${product_id}`
+  const url = `/products?search=${product_id}`
   const res = (await api<Root>(url)).data
   if (!res.length)
     throw createError({ statusCode: 404, statusMessage: 'Product not found' })

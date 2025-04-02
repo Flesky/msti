@@ -24,7 +24,7 @@ const params = computed(() => ({
   brand: route.query.brand,
 }))
 
-const { data, status } = await useFetch(() => `/api/products`, {
+const { data, status } = await useFetch(() => `/api/products/unimed`, {
   params,
 })
 
@@ -43,8 +43,8 @@ const isMobile = useBreakpoints(breakpointsTailwind).smallerOrEqual('lg')
 
 <template>
   <div class="mx-auto max-w-screen-2xl px-4 py-12">
-    <h1 class="text-4xl font-medium">
-      Products
+    <h1 class="text-center text-4xl font-medium">
+      Unimed Products
     </h1>
 
     <div class="mt-6 flex h-12 w-full flex-col items-center justify-between gap-x-4 lg:flex-row">
@@ -188,7 +188,7 @@ const isMobile = useBreakpoints(breakpointsTailwind).smallerOrEqual('lg')
         </div>
 
         <div v-else class="grid grid-cols-2 gap-1 @3xl:grid-cols-3 @5xl:grid-cols-4 @7xl:grid-cols-5">
-          <NuxtLink v-for="product in data?.data" v-slot="{ navigate }" :key="product.id" :to="`/products/${product.product_id}`" custom>
+          <NuxtLink v-for="product in data?.data" v-slot="{ navigate }" :key="product.id" :to="`/products/unimed/${product.product_id}`" custom>
             <Card :pt="{ root: 'rounded-none border shadow-none', title: 'min-h-40' }" @click="navigate">
               <template #header>
                 <Image v-if="product.images?.length" class="w-full" image-class="aspect-[3/2] w-full object-cover" :src="product.images[0]" />

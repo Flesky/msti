@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const route = useRoute()
-const { data: product } = await useFetch(`/api/products/${route.params.id}`)
+const { data: product } = await useFetch(`/api/products/unimed/${route.params.id}`)
 
 const quantity = ref(1)
 const { addToCart } = useCartStore()

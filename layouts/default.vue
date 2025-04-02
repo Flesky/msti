@@ -10,8 +10,8 @@ const items = ref([
     label: 'Products',
     // url: '/products',
     items: [
-      { label: 'Unimed', url: '/products/' },
-      { label: 'Rigel', url: '/rigel/' },
+      { label: 'Unimed', url: '/products/unimed' },
+      { label: 'Rigel', url: '/products/rigel/' },
     ],
   },
   {
